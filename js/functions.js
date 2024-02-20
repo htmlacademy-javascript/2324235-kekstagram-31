@@ -21,3 +21,28 @@ console.log(checkPhrase('топот'));
 console.log(checkPhrase('ДовОд'));
 console.log(checkPhrase('Кекс'));
 console.log(checkPhrase('Лёша на полке клопа нашёл'));
+
+
+const sortsString = (checkSortsString) => {
+  let result = '';
+
+  checkSortsString = checkSortsString.toString();
+
+  for (let i = 0; i <= checkSortsString.length - 1; i++) {
+    if (Number.isNaN(parseInt(checkSortsString[i], 10)) === false) {
+      result += checkSortsString[i];
+    }
+  }
+
+  return result === '' ? NaN : Number(result);
+};
+
+console.log(sortsString('2023 год'));
+console.log(sortsString('1 кефир, 0.5 батона'));
+console.log(sortsString('ECMAScript 2022'));
+console.log(sortsString('агент 007'));
+console.log(sortsString('а я томат'));
+
+console.log(sortsString(2023));
+console.log(sortsString(-1));
+console.log(sortsString(1.5));
