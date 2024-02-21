@@ -1,8 +1,8 @@
 const checkStringLength = (checkString, maxLength) => checkString.length <= maxLength;
 
-console.log(checkStringLength('проверяемая строка', 20));
-console.log(checkStringLength('проверяемая строка', 18));
-console.log(checkStringLength('проверяемая строка', 10));
+checkStringLength('проверяемая строка', 20);
+checkStringLength('проверяемая строка', 18);
+checkStringLength('проверяемая строка', 10);
 
 
 const checkPhrase = (palindromeString) => {
@@ -17,10 +17,10 @@ const checkPhrase = (palindromeString) => {
   return palindromeString === checkPalindrome;
 };
 
-console.log(checkPhrase('топот'));
-console.log(checkPhrase('ДовОд'));
-console.log(checkPhrase('Кекс'));
-console.log(checkPhrase('Лёша на полке клопа нашёл'));
+checkPhrase('топот');
+checkPhrase('ДовОд');
+checkPhrase('Кекс');
+checkPhrase('Лёша на полке клопа нашёл');
 
 
 const sortsString = (checkSortsString) => {
@@ -37,12 +37,12 @@ const sortsString = (checkSortsString) => {
   return result === '' ? NaN : Number(result);
 };
 
-console.log(sortsString('2023 год'));
-console.log(sortsString('1 кефир, 0.5 батона'));
-console.log(sortsString('ECMAScript 2022'));
-console.log(sortsString('агент 007'));
-console.log(sortsString('а я томат'));
+sortsString('2023 год');
+sortsString('1 кефир, 0.5 батона');
+sortsString('ECMAScript 2022');
+sortsString('агент 007');
+sortsString('а я томат');
 
-console.log(sortsString(2023));
-console.log(sortsString(-1));
-console.log(sortsString(1.5));
+sortsString(2023);
+sortsString(-1);
+sortsString(1.5);
