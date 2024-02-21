@@ -29,7 +29,7 @@ const sortsString = (checkSortsString) => {
   checkSortsString = checkSortsString.toString();
 
   for (let i = 0; i <= checkSortsString.length - 1; i++) {
-    if (Number.isNaN(parseInt(checkSortsString[i], 10)) === false) {
+    if (Number.isNaN(parseInt(checkSortsString[i], 10))) {
       result += checkSortsString[i];
     }
   }
