@@ -1,11 +1,11 @@
-const checkStringLength = (checkString, maxLength) => checkString.length <= maxLength;
+const checkStringLength = (checkString = '', maxLength = 1) => checkString.length <= maxLength;
 
 checkStringLength('проверяемая строка', 20);
 checkStringLength('проверяемая строка', 18);
 checkStringLength('проверяемая строка', 10);
 
 
-const checkPhrase = (palindromeString) => {
+const checkPhrase = (palindromeString = '') => {
   palindromeString = palindromeString.replaceAll(' ' , '').toLowerCase();
 
   let checkPalindrome = '';
