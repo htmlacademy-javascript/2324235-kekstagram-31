@@ -5,9 +5,6 @@ checkStringLength('проверяемая строка', 18);
 checkStringLength('проверяемая строка', 10);
 
 
-const checkPhrase = (palindromeString = '') => {
-const checkStringLength = (checkString, maxLength) => checkString.length <= maxLength;
-
 console.log(checkStringLength('проверяемая строка', 20));
 console.log(checkStringLength('проверяемая строка', 18));
 console.log(checkStringLength('проверяемая строка', 10));
@@ -59,4 +56,3 @@ console.log(sortsString('а я томат'));
 console.log(sortsString(2023));
 console.log(sortsString(-1));
 console.log(sortsString(1.5));
-
