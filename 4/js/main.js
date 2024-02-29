@@ -1,4 +1,4 @@
-import {createPost} from './data.js';
+import {posts} from './data.js';
 
-createPost();
+console.log(posts);
 
