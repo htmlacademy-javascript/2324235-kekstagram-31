@@ -50,7 +50,6 @@ const createPost = () => ({
   description: getRandomArrayElement(DESCRIPTIONS),
 });
 
-const posts = Array.from({length: CREATE_POST}, createPost);
-posts.values();
+const createPosts = () => Array.from({length: CREATE_POST}, createPost);
 
-export {posts};
+export {createPosts};
