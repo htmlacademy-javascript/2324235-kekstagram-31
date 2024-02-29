@@ -53,3 +53,4 @@ const createPost = () => ({
 const posts = Array.from({length: CREATE_POST}, createPost);
 posts.values();
 
+export {createPost};
