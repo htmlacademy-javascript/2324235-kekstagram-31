@@ -38,3 +38,26 @@ const sortsString = (checkSortsString) => {
 };
 
 sortsString('kek');
+
+
+// 5.16. Функции возвращаются
+
+const convertTimeToNumber = (time) => {
+  const [hours, minutes] = time.split(':').map(Number);
+  return hours * 60 + minutes;
+};
+
+const isMeetingInWorkTime = (workStart, workEnd, meetingStart, meetingMinutes) => {
+
+  workStart = convertTimeToNumber(workStart);
+  workEnd = convertTimeToNumber(workEnd);
+  meetingStart = convertTimeToNumber(meetingStart);
+
+  return meetingStart + meetingMinutes <= workEnd && meetingStart >= workStart;
+};
+
+isMeetingInWorkTime('08:00', '17:30', '14:00', 90);
+isMeetingInWorkTime('8:0', '10:0', '8:0', 120);
+isMeetingInWorkTime('08:00', '14:30', '14:00', 90);
+isMeetingInWorkTime('14:00', '17:30', '08:0', 90);
+isMeetingInWorkTime('8:00', '17:30', '08:00', 900);
