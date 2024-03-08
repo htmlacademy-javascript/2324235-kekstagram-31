@@ -20,5 +20,3 @@ usersPictures.forEach(({ url, description, likes, comments }) => {
 });
 
 containerUsersPictures.appendChild(usersPicturesFragment);
-
-//console.log(containerUsersPictures);
