@@ -1,4 +1,5 @@
 import { createPosts } from './data.js';
+import { openBigPicture } from './fullSize.js';
 
 const templateUserPicture = document.querySelector('#picture')
   .content
@@ -10,7 +11,6 @@ const containerUsersPictures = document.querySelector('.pictures');
 
 const renderUsersPictures = () => {
   const usersPicturesFragment = document.createDocumentFragment();
-  console.log(usersPictures);
 
   usersPictures.forEach(({ url, description, likes, comments }) => {
     const userPicture = templateUserPicture.cloneNode(true);
@@ -21,12 +21,21 @@ const renderUsersPictures = () => {
     usersPicturesFragment.append(userPicture);
   });
 
-  console.log(usersPicturesFragment);
   containerUsersPictures.append(usersPicturesFragment);
+
+};
+
+const pictureHandler = () => {
+  const pictures = document.querySelectorAll('.picture');
+  pictures.forEach((picture) => {
+    picture.addEventListener('click', () => {
+      openBigPicture();
+    });
+  });
 };
 
 const clearUsersPictures = () => {
   containerUsersPictures.innerHTML = '';
 };
 
-export { renderUsersPictures, clearUsersPictures };
+export { renderUsersPictures, clearUsersPictures, pictureHandler };
