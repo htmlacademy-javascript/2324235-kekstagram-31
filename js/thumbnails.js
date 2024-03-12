@@ -23,7 +23,6 @@ const renderUsersPictures = () => {
   });
 
   containerUsersPictures.append(usersPicturesFragment);
-
 };
 
 const pictureHandler = () => {
@@ -31,7 +30,7 @@ const pictureHandler = () => {
   pictures.forEach((picture) => {
     picture.addEventListener('click', (event) => {
       const currentPicture = usersPictures.find((photo) => event.currentTarget.dataset.id === photo.id.toString());
-      userBigPicture.querySelector('.big - picture__img img').src = currentPicture.url;
+      userBigPicture.querySelector('.big-picture__img img').src = currentPicture.url;
       userBigPicture.querySelector('.social__comment-shown-count').textContent = currentPicture.comments.length;
       openBigPicture();
     });
