@@ -1,4 +1,4 @@
-import { isEscapeKey, isEnterKey, isBodyKey } from './util.js';
+import { isEscapeKey, isEnterKey } from './util.js';
 
 const userBigPicture = document.querySelector('.big-picture');
 const userBigPictureCancel = document.querySelector('.big-picture__cancel');
@@ -8,9 +8,10 @@ const pictureUrl = fullPicture.querySelector('img');
 const commentsCount = userBigPicture.querySelector('.social__comment-total-count');
 const socialCommentCount = userBigPicture.querySelector('.social__comment-count');
 const description = userBigPicture.querySelector('.social__caption');
-const comments = userBigPicture.querySelector('.comments-loader');
+const commentsLoader = userBigPicture.querySelector('.comments-loader');
 const socialComments = userBigPicture.querySelector('.social__comments');
-const body = document.querySelector('body');
+
+commentsLoader.classList.add('.hidden');
 
 const onBigPictureKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -21,7 +22,7 @@ const onBigPictureKeydown = (evt) => {
 
 function openBigPicture(photo) {
   userBigPicture.classList.remove('hidden');
-  // body.classList.add('modal-open');
+  document.body.classList.add('modal-open');
   document.addEventListener('keydown', onBigPictureKeydown);
 
   likesCounter.textContent = photo.likes;
@@ -30,8 +31,9 @@ function openBigPicture(photo) {
   socialCommentCount.textContent = `${photo.comments.length}`;
   description.textContent = photo.description;
 
-  if (Array.isArray(comments)) {
-    comments.forEach((comment) => {
+  if (Array.isArray(photo.comments)) {
+    socialComments.innerHTML = '';
+    photo.comments.forEach((comment) => {
       const commentElement = document.createElement('li');
       commentElement.classList.add('social__comment');
 
@@ -42,7 +44,7 @@ function openBigPicture(photo) {
 
       const textElement = document.createElement('p');
       textElement.classList.add('social__text');
-      textElement.textContent = comment.text;
+      textElement.textContent = comment.message;
 
       commentElement.appendChild(avatarImg);
       commentElement.appendChild(textElement);
@@ -54,18 +56,12 @@ function openBigPicture(photo) {
 
 function closeBigPicture() {
   userBigPicture.classList.add('hidden');
-  // body.classList.remove('modal-open');
+  document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onBigPictureKeydown);
 }
 
 userBigPictureCancel.addEventListener('click', () => {
   closeBigPicture();
-});
-
-body.addEventListener('click', (evt) => {
-  if (isBodyKey(evt)) {
-    closeBigPicture();
-  }
 });
 
 userBigPictureCancel.addEventListener('keydown', (evt) => {
@@ -74,4 +70,4 @@ userBigPictureCancel.addEventListener('keydown', (evt) => {
   }
 });
 
-export { openBigPicture, closeBigPicture, userBigPicture };
+export { openBigPicture, closeBigPicture };
