@@ -1,5 +1,5 @@
 import { createPosts } from './data.js';
-import { openBigPicture } from './fullSize.js';
+import { openBigPicture, userBigPicture } from './fullSize.js';
 
 const templateUserPicture = document.querySelector('#picture')
   .content
@@ -12,23 +12,26 @@ const containerUsersPictures = document.querySelector('.pictures');
 const renderUsersPictures = () => {
   const usersPicturesFragment = document.createDocumentFragment();
 
-  usersPictures.forEach(({ url, description, likes, comments }) => {
+  usersPictures.forEach(({ url, description, likes, comments, id }) => {
     const userPicture = templateUserPicture.cloneNode(true);
     userPicture.querySelector('.picture__img').src = url;
     userPicture.querySelector('.picture__img').alt = description;
     userPicture.querySelector('.picture__likes').textContent = likes;
     userPicture.querySelector('.picture__comments').textContent = comments.length;
+    userPicture.dataset.id = id;
     usersPicturesFragment.append(userPicture);
   });
 
   containerUsersPictures.append(usersPicturesFragment);
-
 };
 
 const pictureHandler = () => {
   const pictures = document.querySelectorAll('.picture');
   pictures.forEach((picture) => {
-    picture.addEventListener('click', () => {
+    picture.addEventListener('click', (event) => {
+      const currentPicture = usersPictures.find((photo) => event.currentTarget.dataset.id === photo.id.toString());
+      userBigPicture.querySelector('.big-picture__img img').src = currentPicture.url;
+      userBigPicture.querySelector('.social__comment-shown-count').textContent = currentPicture.comments.length;
       openBigPicture();
     });
   });
