@@ -11,6 +11,4 @@ const isEscapeKey = (evt) => evt.key === 'Escape';
 
 const isEnterKey = (evt) => evt.key === 'Enter';
 
-const isBodyKey = (evt) => evt.key === 'body';
-
-export { getRandomInteger, getRandomArrayElement, isEscapeKey, isEnterKey, isBodyKey };
+export { getRandomInteger, getRandomArrayElement, isEscapeKey, isEnterKey };

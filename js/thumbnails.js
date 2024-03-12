@@ -1,5 +1,5 @@
 import { createPosts } from './data.js';
-import { openBigPicture, userBigPicture } from './fullSize.js';
+import { openBigPicture } from './fullSize.js';
 
 const templateUserPicture = document.querySelector('#picture')
   .content
@@ -30,9 +30,7 @@ const pictureHandler = () => {
   pictures.forEach((picture) => {
     picture.addEventListener('click', (event) => {
       const currentPicture = usersPictures.find((photo) => event.currentTarget.dataset.id === photo.id.toString());
-      userBigPicture.querySelector('.big-picture__img img').src = currentPicture.url;
-      userBigPicture.querySelector('.social__comment-shown-count').textContent = currentPicture.comments.length;
-      openBigPicture();
+      openBigPicture(currentPicture);
     });
   });
 };
