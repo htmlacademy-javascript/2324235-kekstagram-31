@@ -1,4 +1,5 @@
 import { createPosts } from './data.js';
+import { openBigPicture } from './fullSize.js';
 
 const templateUserPicture = document.querySelector('#picture')
   .content
@@ -8,15 +9,34 @@ const usersPictures = createPosts();
 
 const containerUsersPictures = document.querySelector('.pictures');
 
-const usersPicturesFragment = document.createDocumentFragment();
+const renderUsersPictures = () => {
+  const usersPicturesFragment = document.createDocumentFragment();
 
-usersPictures.forEach(({ url, description, likes, comments }) => {
-  const userPicture = templateUserPicture.cloneNode(true);
-  userPicture.querySelector('.picture__img').src = url;
-  userPicture.querySelector('.picture__img').alt = description;
-  userPicture.querySelector('.picture__likes').textContent = likes;
-  userPicture.querySelector('.picture__comments').textContent = comments.length;
-  usersPicturesFragment.appendChild(userPicture);
-});
+  usersPictures.forEach(({ url, description, likes, comments, id }) => {
+    const userPicture = templateUserPicture.cloneNode(true);
+    userPicture.querySelector('.picture__img').src = url;
+    userPicture.querySelector('.picture__img').alt = description;
+    userPicture.querySelector('.picture__likes').textContent = likes;
+    userPicture.querySelector('.picture__comments').textContent = comments.length;
+    userPicture.dataset.id = id;
+    usersPicturesFragment.append(userPicture);
+  });
 
-containerUsersPictures.appendChild(usersPicturesFragment);
+  containerUsersPictures.append(usersPicturesFragment);
+};
+
+const pictureHandler = () => {
+  const pictures = document.querySelectorAll('.picture');
+  pictures.forEach((picture) => {
+    picture.addEventListener('click', (event) => {
+      const currentPicture = usersPictures.find((photo) => event.currentTarget.dataset.id === photo.id.toString());
+      openBigPicture(currentPicture);
+    });
+  });
+};
+
+const clearUsersPictures = () => {
+  containerUsersPictures.innerHTML = '';
+};
+
+export { renderUsersPictures, clearUsersPictures, pictureHandler };

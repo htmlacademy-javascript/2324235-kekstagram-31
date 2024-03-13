@@ -1,5 +1,4 @@
-import './thumbnails.js';
-import { createPosts } from './data.js';
+import { renderUsersPictures, pictureHandler } from './thumbnails.js';
 
-createPosts();
-
+renderUsersPictures();
+pictureHandler();
