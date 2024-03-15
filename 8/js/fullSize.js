@@ -26,7 +26,7 @@ const updateAndRenderComments = () => {
   renderComments(currentOpenPhoto.comments);
   socialCommentCount.textContent = `${Math.min(currentCommentsCount, currentOpenPhoto.comments.length)}`;
   if (currentCommentsCount >= currentOpenPhoto.comments.length) {
-    commentsLoader.classList.add('.hidden');
+    commentsLoader.classList.add('hidden');
   }
 };
 
@@ -45,10 +45,10 @@ function renderComments(comments) {
     textElement.classList.add('social__text');
     textElement.textContent = comment.message;
 
-    commentElement.appendChild(avatarImg);
-    commentElement.appendChild(textElement);
+    commentElement.append(avatarImg);
+    commentElement.append(textElement);
 
-    socialComments.appendChild(commentElement);
+    socialComments.append(commentElement);
   });
 }
 
@@ -72,15 +72,6 @@ function openBigPicture(photo) {
   renderComments(photo.comments);
 
   commentsLoader.addEventListener('click', updateAndRenderComments);
-
-  commentsLoader.addEventListener('click', () => {
-    currentCommentsCount += COMMENTS_LOAD_STEP;
-    renderComments(photo.comments);
-    socialCommentCount.textContent = `${Math.min(currentCommentsCount, photo.comments.length)}`;
-    if (currentCommentsCount >= photo.comments.length) {
-      commentsLoader.classList.add('hidden');
-    }
-  });
 }
 
 function closeBigPicture() {
