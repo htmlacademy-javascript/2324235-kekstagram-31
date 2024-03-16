@@ -1,4 +1,3 @@
-import { renderUsersPictures, pictureHandler } from './thumbnails.js';
+import { renderUsersPictures } from './thumbnails.js';
 
 renderUsersPictures();
-pictureHandler();

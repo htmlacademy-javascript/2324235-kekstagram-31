@@ -24,7 +24,7 @@ const onBigPictureKeydown = (evt) => {
 const updateAndRenderComments = () => {
   currentCommentsCount += COMMENTS_LOAD_STEP;
   renderComments(currentOpenPhoto.comments);
-  socialCommentCount.textContent = `${Math.min(currentCommentsCount, currentOpenPhoto.comments.length)}`;
+  socialCommentCount.textContent = Math.min(currentCommentsCount, currentOpenPhoto.comments.length);
   if (currentCommentsCount >= currentOpenPhoto.comments.length) {
     commentsLoader.classList.add('hidden');
   }
@@ -62,6 +62,15 @@ function openBigPicture(photo) {
   pictureUrl.src = photo.url;
   commentsCount.textContent = photo.comments.length;
   socialCommentCount.textContent = photo.comments.length < 5 ? photo.comments.length : 5;
+
+  setTimeout(() => {
+    if (photo.comments.length <= 5) {
+      commentsLoader.classList.add('hidden');
+    } else {
+      commentsLoader.classList.remove('hidden');
+    }
+  }, 0);
+
   description.textContent = photo.description;
 
   commentsLoader.classList.remove('hidden');
