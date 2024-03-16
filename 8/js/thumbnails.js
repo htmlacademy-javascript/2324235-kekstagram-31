@@ -20,23 +20,16 @@ const renderUsersPictures = () => {
     userPicture.querySelector('.picture__comments').textContent = comments.length;
     userPicture.dataset.id = id;
     usersPicturesFragment.append(userPicture);
-  });
-
-  containerUsersPictures.append(usersPicturesFragment);
-};
-
-const pictureHandler = () => {
-  const pictures = document.querySelectorAll('.picture');
-  pictures.forEach((picture) => {
-    picture.addEventListener('click', (event) => {
+    userPicture.addEventListener('click', (event) => {
       const currentPicture = usersPictures.find((photo) => event.currentTarget.dataset.id === photo.id.toString());
       openBigPicture(currentPicture);
     });
   });
+  containerUsersPictures.append(usersPicturesFragment);
 };
 
 const clearUsersPictures = () => {
   containerUsersPictures.innerHTML = '';
 };
 
-export { renderUsersPictures, clearUsersPictures, pictureHandler };
+export { renderUsersPictures, clearUsersPictures };
