@@ -5,7 +5,7 @@ const cancelButton = document.querySelector('.img-upload__cancel');
 const submitButton = imgUploadForm.querySelector('.img-upload__submit');
 const hashtagInput = imgUploadForm.querySelector('.text__hashtags');
 const commentInput = imgUploadForm.querySelector('.text__description');
-const effectLevelSlider = document.querySelector('.effect-level__slider');
+// const effectLevelSlider = document.querySelector('.effect-level__slider');
 
 const pristine = new Pristine(imgUploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -109,7 +109,7 @@ imgUploadForm.addEventListener('submit', (evt) => {
     scaleControlValue.value = '100%';
     imgPreview.style.transform = 'scale(1)';
     imgPreview.style.filter = 'none';
-    //effectLevelSlider.noUiSlider.set(100);
+    // effectLevelSlider.noUiSlider.set(100);
     imgUploadForm.submit();
     imgUploadForm.reset();
   } else {
@@ -118,56 +118,66 @@ imgUploadForm.addEventListener('submit', (evt) => {
   submitButton.disabled = false;
 });
 
+// let slider = document.getElementById('slider');
 
-const effects = document.querySelectorAll('.effects__radio');
-const effectLevelValue = document.querySelector('.effect-level__value');
-const imgUploadPreview = document.querySelector('.img-upload__preview img');
+// noUiSlider.create(slider, {
+//   start: [20, 80],
+//   connect: true,
+//   range: {
+//     'min': 0,
+//     'max': 100
+//   }
+// });
 
-let currentEffect = 'none';
-let previousEffect = 'none';
-let previousEffectLevel = 100;
+// const effects = document.querySelectorAll('.effects__radio');
+// const effectLevelValue = document.querySelector('.effect-level__value');
+// const imgUploadPreview = document.querySelector('.img-upload__preview img');
 
-effects.forEach((effect) => {
-  effect.addEventListener('change', (evt) => {
-    imgUploadPreview.classList.remove(`effects__preview--${currentEffect}`);
-    currentEffect = evt.target.value;
-    imgUploadPreview.classList.add(`effects__preview--${currentEffect}`);
+// let currentEffect = 'none';
+// let previousEffect = 'none';
+// let previousEffectLevel = 100;
 
-    if (currentEffect === 'none') {
-      imgUploadPreview.style.filter = 'none';
-      effectLevelSlider.style.visibility = 'hidden';
-      imgUploadPreview.classList.add(`effects__preview--${previousEffect}`);
-      effectLevelSlider.noUiSlider.set(previousEffectLevel);
-    } else {
-      effectLevelSlider.style.visibility = 'visible';
-      effectLevelSlider.noUiSlider.set(100);
-      previousEffect = currentEffect;
-      previousEffectLevel = effectLevelValue.value;
-    }
-  });
-});
+// effects.forEach((effect) => {
+//   effect.addEventListener('change', (evt) => {
+//     imgUploadPreview.classList.remove(`effects__preview--${currentEffect}`);
+//     currentEffect = evt.target.value;
+//     imgUploadPreview.classList.add(`effects__preview--${currentEffect}`);
 
-effectLevelSlider.noUiSlider.on('update', (_, handle, unencoded) => {
-  effectLevelValue.value = unencoded[handle];
+//     if (currentEffect === 'none') {
+//       imgUploadPreview.style.filter = 'none';
+//       effectLevelSlider.style.visibility = 'hidden';
+//       imgUploadPreview.classList.add(`effects__preview--${previousEffect}`);
+//       effectLevelSlider.noUiSlider.set(previousEffectLevel);
+//     } else {
+//       effectLevelSlider.style.visibility = 'visible';
+//       effectLevelSlider.noUiSlider.set(100);
+//       previousEffect = currentEffect;
+//       previousEffectLevel = effectLevelValue.value;
+//     }
+//   });
+// });
 
-  switch (currentEffect) {
-    case 'chrome':
-      imgUploadPreview.style.filter = `grayscale(${unencoded[handle] / 100})`;
-      break;
-    case 'sepia':
-      imgUploadPreview.style.filter = `sepia(${unencoded[handle] / 100})`;
-      break;
-    case 'marvin':
-      imgUploadPreview.style.filter = `invert(${unencoded[handle]}%)`;
-      break;
-    case 'phobos':
-      imgUploadPreview.style.filter = `blur(${unencoded[handle] * 3 / 100}px)`;
-      break;
-    case 'heat':
-      imgUploadPreview.style.filter = `brightness(${1 + 2 * unencoded[handle] / 100})`;
-      break;
-    default:
-      imgUploadPreview.style.filter = 'none';
-  }
-});
+// effectLevelSlider.noUiSlider.on('update', (_, handle, unencoded) => {
+//   effectLevelValue.value = unencoded[handle];
+
+//   switch (currentEffect) {
+//     case 'chrome':
+//       imgUploadPreview.style.filter = `grayscale(${unencoded[handle] / 100})`;
+//       break;
+//     case 'sepia':
+//       imgUploadPreview.style.filter = `sepia(${unencoded[handle] / 100})`;
+//       break;
+//     case 'marvin':
+//       imgUploadPreview.style.filter = `invert(${unencoded[handle]}%)`;
+//       break;
+//     case 'phobos':
+//       imgUploadPreview.style.filter = `blur(${unencoded[handle] * 3 / 100}px)`;
+//       break;
+//     case 'heat':
+//       imgUploadPreview.style.filter = `brightness(${1 + 2 * unencoded[handle] / 100})`;
+//       break;
+//     default:
+//       imgUploadPreview.style.filter = 'none';
+//   }
+// });
 
