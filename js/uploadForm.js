@@ -67,6 +67,15 @@ scaleControlBigger.addEventListener('click', () => {
 pristine.addValidator(hashtagInput, (value) => {
   const hashtags = value.split(' ');
 
+  if (hashtags.length > 5) {
+    return false;
+  }
+
+  const hashDuplicates = new Set(hashtags).size !== hashtags.length;
+  if (hashDuplicates) {
+    return false;
+  }
+
   for (let i = 0; i < hashtags.length; i++) {
     const hashtag = hashtags[i];
 
@@ -83,7 +92,24 @@ pristine.addValidator(hashtagInput, (value) => {
     }
   }
   return true;
-}, 'Неверный формат хэштега. Хэштег должен начинаться с символа #, содержать от 1 до 19 буквенно-цифровых символов и не содержать специальных символов или пробелов.', 2);
+}, 'Неверный формат хэштега. Хэштег должен начинаться с символа #, содержать от 1 до 19 буквенно-цифровых символов и не содержать специальных символов или пробелов. Один и тот же хэштег не может быть использован дважды. Нельзя указать больше пяти хэштегов', 2);
+
+hashtagInput.addEventListener('focus', () => {
+  document.removeEventListener('keydown', onEscKeyDown);
+});
+
+hashtagInput.addEventListener('blur', () => {
+  document.addEventListener('keydown', onEscKeyDown);
+});
+
+function onEscKeyDown(evt) {
+  if (evt.key === 'Escape' && !evt.target.closest('.text__hashtags')) {
+    formOverlay.classList.add('hidden');
+    document.body.classList.remove('modal-open');
+  }
+}
+
+document.addEventListener('keydown', onEscKeyDown);
 
 pristine.addValidator(commentInput, (value) => {
   if (value === '') {
