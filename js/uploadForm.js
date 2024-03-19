@@ -3,9 +3,15 @@ const inputFile = document.querySelector('.img-upload__input');
 const formOverlay = document.querySelector('.img-upload__overlay');
 const cancelButton = document.querySelector('.img-upload__cancel');
 const submitButton = imgUploadForm.querySelector('.img-upload__submit');
-const hashtagInput = imgUploadForm.querySelector('.hashtag-input');
-const commentInput = imgUploadForm.querySelector('.comment-input');
+const hashtagInput = imgUploadForm.querySelector('.text__hashtags');
+const commentInput = imgUploadForm.querySelector('.text__description');
 const effectLevelSlider = document.querySelector('.effect-level__slider');
+
+const pristine = new Pristine(imgUploadForm, {
+  classTo: 'img-upload__field-wrapper',
+  errorTextParent: 'img-upload__field-wrapper',
+  errorTextClass: 'img-upload__field-wrapper--error'
+});
 
 inputFile.addEventListener('change', () => {
   formOverlay.classList.remove('hidden');
@@ -58,138 +64,110 @@ scaleControlBigger.addEventListener('click', () => {
   }
 });
 
-const pristine = new Pristine(imgUploadForm);
+pristine.addValidator(hashtagInput, (value) => {
+  const hashtags = value.split(' ');
 
-// const isValid = pristine.validate();
+  for (let i = 0; i < hashtags.length; i++) {
+    const hashtag = hashtags[i];
+
+    if (!hashtag.startsWith('#')) {
+      return false;
+    }
+
+    if (hashtag.length > 20) {
+      return false;
+    }
+
+    if (/[^a-zа-яё0-9#]/i.test(hashtag)) {
+      return false;
+    }
+  }
+  return true;
+}, 'Неверный формат хэштега. Хэштег должен начинаться с символа #, содержать от 1 до 19 буквенно-цифровых символов и не содержать специальных символов или пробелов.', 2);
+
+pristine.addValidator(commentInput, (value) => {
+  if (value === '') {
+    return true;
+  }
+  return value.length <= 140;
+}, 'Комментарий не может быть длиннее 140 символов.', 2);
+
+commentInput.addEventListener('keydown', (evt) => {
+  if (evt.key === 'Escape') {
+    evt.stopPropagation();
+  }
+});
+
+imgUploadForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+
+  submitButton.disabled = true;
+
+  const isValid = pristine.validate();
+
+  if (isValid) {
+    scaleControlValue.value = '100%';
+    imgPreview.style.transform = 'scale(1)';
+    imgPreview.style.filter = 'none';
+    //effectLevelSlider.noUiSlider.set(100);
+    imgUploadForm.submit();
+    imgUploadForm.reset();
+  } else {
+    // Если форма невалидна, показываем ошибки
+  }
+  submitButton.disabled = false;
+});
 
 
-// pristine.addValidator(hashtagInput, function (value) {
-//   const hashtags = value.split(' ');
+const effects = document.querySelectorAll('.effects__radio');
+const effectLevelValue = document.querySelector('.effect-level__value');
+const imgUploadPreview = document.querySelector('.img-upload__preview img');
 
-//   for (let i = 0; i < hashtags.length; i++) {
-//     const hashtag = hashtags[i];
+let currentEffect = 'none';
+let previousEffect = 'none';
+let previousEffectLevel = 100;
 
-//     if (!hashtag.startsWith('#')) {
-//       return false;
-//     }
+effects.forEach((effect) => {
+  effect.addEventListener('change', (evt) => {
+    imgUploadPreview.classList.remove(`effects__preview--${currentEffect}`);
+    currentEffect = evt.target.value;
+    imgUploadPreview.classList.add(`effects__preview--${currentEffect}`);
 
-//     if (hashtag.length > 20) {
-//       return false;
-//     }
+    if (currentEffect === 'none') {
+      imgUploadPreview.style.filter = 'none';
+      effectLevelSlider.style.visibility = 'hidden';
+      imgUploadPreview.classList.add(`effects__preview--${previousEffect}`);
+      effectLevelSlider.noUiSlider.set(previousEffectLevel);
+    } else {
+      effectLevelSlider.style.visibility = 'visible';
+      effectLevelSlider.noUiSlider.set(100);
+      previousEffect = currentEffect;
+      previousEffectLevel = effectLevelValue.value;
+    }
+  });
+});
 
-//     if (/[^a-zа-яё0-9#]/i.test(hashtag)) {
-//       return false;
-//     }
-//   }
-//   return true;
-// }, 'Неверный формат хэштега. Хэштег должен начинаться с символа #, содержать от 1 до 19 буквенно-цифровых символов и не содержать специальных символов или пробелов.', 2);
+effectLevelSlider.noUiSlider.on('update', (_, handle, unencoded) => {
+  effectLevelValue.value = unencoded[handle];
 
-// pristine.addValidator(commentInput, function (value) {
-//   if (value === '') {
-//     return true;
-//   }
-//   return value.length <= 140;
-// }, 'Комментарий не может быть длиннее 140 символов.', 2);
-
-// commentInput.addEventListener('keydown', function (evt) {
-//   if (evt.key === 'Escape') {
-//     evt.stopPropagation();
-//   }
-// });
-
-// pristine.addValidator(hashtagInput, (value) => {
-//   const hashtag = /^#[a-zа-яё0-9]{1,19}$/i;
-//   return hashtag.test(value);
-// }, 'Неверный формат хэштега. Хэштег должен начинаться с символа # и содержать от 1 до 19 буквенно-цифровых символов.', 2);
-
-// pristine.addValidator(commentInput, (value) =>
-//   value.length <= 140, 'Комментарий не может быть длиннее 140 символов.', 2);
-
-// commentInput.addEventListener('keydown', (evt) => {
-//   if (evt.key === 'Escape') {
-//     evt.stopPropagation();
-//   }
-// });
-
-// imgUploadForm.addEventListener('submit', (evt) => {
-//   evt.preventDefault();
-
-//   submitButton.disabled = true;
-
-//   const isValid = pristine.validate();
-
-//   if (isValid) {
-//     imgUploadForm.reset();
-//     scaleControlValue.value = '100%';
-//     imgPreview.style.transform = 'scale(1)';
-//     imgPreview.style.filter = 'none';
-//     effectLevelSlider.noUiSlider.set(100);
-//   } else {
-//     // Если форма невалидна, показываем ошибки
-//   }
-
-//   submitButton.disabled = false;
-// });
-
-// // Получаем элементы управления эффектами
-// const effectControls = document.querySelectorAll('.effects__radio');
-// const effectLevelValue = document.querySelector('.effect-level__value');
-
-// // Инициализируем слайдер noUiSlider
-// noUiSlider.create(effectLevelSlider, {
-//   start: 100,
-//   range: {
-//     min: 0,
-//     max: 100
-//   }
-// });
-
-// // Обработчик изменения значения слайдера
-// effectLevelSlider.noUiSlider.on('update', (values, handle) => {
-//   effectLevelValue.value = values[handle];
-//   // Обновляем CSS-стиль изображения в зависимости от выбранного эффекта и значения слайдера
-//   updateImageStyle();
-// });
-
-// // Обработчики переключения эффектов
-// effectControls.forEach((control) => {
-//   control.addEventListener('change', () => {
-//     // Сбрасываем значение слайдера до начального значения (100%)
-//     effectLevelSlider.noUiSlider.set(100);
-
-//     // Обновляем CSS-стиль изображения в зависимости от выбранного эффекта
-//     updateImageStyle();
-//   });
-// });
-
-// function updateImageStyle() {
-//   // Получаем выбранный эффект
-//   const selectedEffect = document.querySelector('.effects__radio:checked').value;
-
-//   // Получаем значение слайдера
-//   const sliderValue = effectLevelSlider.noUiSlider.get();
-
-//   // Обновляем CSS-стиль изображения в зависимости от выбранного эффекта
-//   switch (selectedEffect) {
-//     case 'chrome':
-//       imgPreview.style.filter = `grayscale(${sliderValue / 100})`;
-//       break;
-//     case 'sepia':
-//       imgPreview.style.filter = `sepia(${sliderValue / 100})`;
-//       break;
-//     case 'marvin':
-//       imgPreview.style.filter = `invert(${sliderValue}%)`;
-//       break;
-//     case 'phobos':
-//       imgPreview.style.filter = `blur(${sliderValue / 10}px)`;
-//       break;
-//     case 'heat':
-//       imgPreview.style.filter = `brightness(${sliderValue / 33.3 + 1})`;
-//       break;
-//     case 'none':
-//     default:
-//       imgPreview.style.filter = 'none';
-//       break;
-//   }
-// }
+  switch (currentEffect) {
+    case 'chrome':
+      imgUploadPreview.style.filter = `grayscale(${unencoded[handle] / 100})`;
+      break;
+    case 'sepia':
+      imgUploadPreview.style.filter = `sepia(${unencoded[handle] / 100})`;
+      break;
+    case 'marvin':
+      imgUploadPreview.style.filter = `invert(${unencoded[handle]}%)`;
+      break;
+    case 'phobos':
+      imgUploadPreview.style.filter = `blur(${unencoded[handle] * 3 / 100}px)`;
+      break;
+    case 'heat':
+      imgUploadPreview.style.filter = `brightness(${1 + 2 * unencoded[handle] / 100})`;
+      break;
+    default:
+      imgUploadPreview.style.filter = 'none';
+  }
+});
 
