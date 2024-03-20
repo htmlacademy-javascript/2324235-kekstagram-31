@@ -23,12 +23,7 @@ cancelButton.addEventListener('click', () => {
   document.body.classList.remove('modal-open');
 });
 
-document.addEventListener('keydown', (evt) => {
-  if (evt.key === 'Escape') {
-    formOverlay.classList.add('hidden');
-    document.body.classList.remove('modal-open');
-  }
-});
+document.addEventListener('keydown', onEscKeyDown);
 
 cancelButton.addEventListener('click', () => {
   formOverlay.classList.add('hidden');
@@ -64,35 +59,48 @@ scaleControlBigger.addEventListener('click', () => {
   }
 });
 
+let message = 'Неверный формат хэштега.';
 pristine.addValidator(hashtagInput, (value) => {
+  if (!value) {
+    return true;
+  }
+
   const hashtags = value.split(' ');
 
   if (hashtags.length > 5) {
+    message = 'Слишком много хэштегов. Максимум 5.';
     return false;
   }
 
-  const hashDuplicates = new Set(hashtags).size !== hashtags.length;
+  const lowerCaseHashtags = hashtags.map((hashtag) => hashtag.toLowerCase());
+  const hashDuplicates = new Set(lowerCaseHashtags).size !== lowerCaseHashtags.length;
+
   if (hashDuplicates) {
+    message = 'Хэштеги не должны повторяться.';
     return false;
   }
 
   for (let i = 0; i < hashtags.length; i++) {
     const hashtag = hashtags[i];
-
-    if (!hashtag.startsWith('#')) {
+    if (hashtag === '#') {
       return false;
     }
-
+    if (!hashtag.startsWith('#')) {
+      message = 'Хэштег должен начинаться с символа #.';
+      return false;
+    }
     if (hashtag.length > 20) {
+      message = 'Хэштег не может быть длиннее 20 символов.';
       return false;
     }
 
     if (/[^a-zа-яё0-9#]/i.test(hashtag)) {
+      message = 'Хэштег может содержать только буквы и цифры.';
       return false;
     }
   }
   return true;
-}, 'Неверный формат хэштега. Хэштег должен начинаться с символа #, содержать от 1 до 19 буквенно-цифровых символов и не содержать специальных символов или пробелов. Один и тот же хэштег не может быть использован дважды. Нельзя указать больше пяти хэштегов', 2);
+}, () => message, 2);
 
 hashtagInput.addEventListener('focus', () => {
   document.removeEventListener('keydown', onEscKeyDown);
