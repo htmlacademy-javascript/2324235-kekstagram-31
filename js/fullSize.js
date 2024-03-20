@@ -100,4 +100,4 @@ userBigPictureCancel.addEventListener('keydown', (evt) => {
   }
 });
 
-export { openBigPicture, closeBigPicture };
+export { openBigPicture, closeBigPicture, onBigPictureKeydown };
