@@ -139,11 +139,11 @@ imgUploadForm.addEventListener('submit', (evt) => {
   const isValid = pristine.validate();
 
   if (isValid) {
+    imgUploadForm.submit();
+    imgUploadForm.reset();
     scaleControlValue.value = '100%';
     imgPreview.style.transform = 'scale(1)';
     imgPreview.style.filter = 'none';
-    imgUploadForm.submit();
-    imgUploadForm.reset();
   }
   submitButton.disabled = false;
 });
@@ -193,7 +193,15 @@ if (slider) {
       effectLevelSlider.classList.add('hidden');
     } else {
       effectLevelSlider.classList.remove('hidden');
+      slider.noUiSlider.set(100);
     }
-    slider.noUiSlider.set(100);
+  });
+
+  window.addEventListener('load', () => {
+    const effectLevelSlider = document.querySelector('.img-upload__effect-level');
+    const currentEffect = document.querySelector('input[name="effect"]:checked').value;
+    if (currentEffect === 'none') {
+      effectLevelSlider.classList.add('hidden');
+    }
   });
 }
