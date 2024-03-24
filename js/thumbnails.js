@@ -1,18 +1,19 @@
-import { createPosts } from './data.js';
+// import { createPosts } from './data.js';
+import { getData } from './api.js';
 import { openBigPicture } from './fullSize.js';
 
 const templateUserPicture = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 
-const usersPictures = createPosts();
+let usersPictures = [];
 
 const containerUsersPictures = document.querySelector('.pictures');
 
-const renderUsersPictures = () => {
+const renderUsersPictures = (pictures) => {
   const usersPicturesFragment = document.createDocumentFragment();
 
-  usersPictures.forEach(({ url, description, likes, comments, id }) => {
+  pictures.forEach(({ url, description, likes, comments, id }) => {
     const userPicture = templateUserPicture.cloneNode(true);
     userPicture.querySelector('.picture__img').src = url;
     userPicture.querySelector('.picture__img').alt = description;
@@ -31,5 +32,18 @@ const renderUsersPictures = () => {
 const clearUsersPictures = () => {
   containerUsersPictures.innerHTML = '';
 };
+
+// 11ДЗ
+
+getData().then((data) => {
+  usersPictures = data;
+  renderUsersPictures(usersPictures);
+}).catch(() => {
+  const errorTemplate = document.querySelector('#data-error').content.cloneNode(true);
+  document.body.appendChild(errorTemplate);
+  setTimeout(() => {
+    document.body.removeChild(document.querySelector('.data-error'));
+  }, 5000);
+});
 
 export { renderUsersPictures, clearUsersPictures };
