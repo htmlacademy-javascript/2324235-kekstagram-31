@@ -152,35 +152,45 @@ const slider = document.querySelector('.effect-level__slider');
 if (slider) {
   noUiSlider.create(slider, {
     start: [100],
-    step: 1,
+    step: 0.1,
     range: {
       'min': [0],
       'max': [100]
+    },
+    format: {
+      to: function (value) {
+        return Number(value).toFixed(1);
+      },
+      from: function (value) {
+        return Number(value);
+      }
     }
   });
 
   slider.noUiSlider.on('update', (values, handle) => {
-    const value = values[handle];
+    const value = Number(values[handle]);
     const effectLevelValue = document.querySelector('.effect-level__value');
-    effectLevelValue.value = value;
+    effectLevelValue.value = value.toFixed(1);
 
     const currentEffect = document.querySelector('input[name="effect"]:checked').value;
 
     switch (currentEffect) {
       case 'chrome':
-        imgPreview.style.filter = `grayscale(${value / 100})`;
+        imgPreview.style.filter = `grayscale(${(value / 100).toFixed(1)})`;
         break;
       case 'sepia':
-        imgPreview.style.filter = `sepia(${value / 100})`;
+        imgPreview.style.filter = `sepia(${(value / 100).toFixed(1)})`;
         break;
       case 'marvin':
-        imgPreview.style.filter = `invert(${value}%)`;
+        imgPreview.style.filter = `invert(${value.toFixed(1)}%)`;
         break;
       case 'phobos':
-        imgPreview.style.filter = `blur(${value * 0.03}px)`;
+        imgPreview.style.filter = `blur(${(value * 0.03).toFixed(1)}px)`;
+        console.log(value, (value * 0.03).toFixed(1));
         break;
       case 'heat':
-        imgPreview.style.filter = `brightness(${1 + (value * 0.02)})`;
+        imgPreview.style.filter = `brightness(${(1 + (value * 0.02)).toFixed(1)})`;
+        console.log(value, (1 + (value * 0.02)).toFixed(1));
         break;
       default:
         imgPreview.style.filter = 'none';
