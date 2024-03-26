@@ -7,7 +7,6 @@ const cancelButton = document.querySelector('.img-upload__cancel');
 const submitButton = imgUploadForm.querySelector('.img-upload__submit');
 const hashtagInput = imgUploadForm.querySelector('.text__hashtags');
 const commentInput = imgUploadForm.querySelector('.text__description');
-// const isEscapeKey = (evt) => evt.key === 'Escape';
 
 const pristine = new Pristine(imgUploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -27,16 +26,16 @@ cancelButton.addEventListener('click', () => {
 
 document.addEventListener('keydown', onEscKeyDown);
 
-cancelButton.addEventListener('click', () => {
-  formOverlay.classList.add('hidden');
-  document.body.classList.remove('modal-open');
+// cancelButton.addEventListener('click', () => {
+//   formOverlay.classList.add('hidden');
+//   document.body.classList.remove('modal-open');
 
-  inputFile.value = '';
-  const otherInputs = imgUploadForm.querySelectorAll('otherInput');
-  otherInputs.forEach((input) => {
-    input.value = '';
-  });
+inputFile.value = '';
+const otherInputs = imgUploadForm.querySelectorAll('otherInput');
+otherInputs.forEach((otherInput) => {
+  otherInput.value = '';
 });
+// });
 
 const scaleControlSmaller = document.querySelector('.scale__control--smaller');
 const scaleControlBigger = document.querySelector('.scale__control--bigger');
@@ -134,24 +133,18 @@ commentInput.addEventListener('keydown', (evt) => {
   }
 });
 
-imgUploadForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
+submitButton.disabled = true;
 
-  submitButton.disabled = true;
+const isValid = pristine.validate();
 
-  const isValid = pristine.validate();
-
-  if (isValid) {
-    imgUploadForm.submit();
-    imgUploadForm.reset();
-    scaleControlValue.value = '100%';
-    imgPreview.style.transform = 'scale(1)';
-    imgPreview.style.filter = 'none';
-  }
-  submitButton.disabled = false;
-});
-
-// 11 ДЗ
+if (isValid) {
+  imgUploadForm.submit();
+  imgUploadForm.reset();
+  scaleControlValue.value = '100%';
+  imgPreview.style.transform = 'scale(1)';
+  imgPreview.style.filter = 'none';
+}
+submitButton.disabled = false;
 
 const successTemplate = document.querySelector('#success').content;
 const successMessage = successTemplate.querySelector('.success').cloneNode(true);
@@ -195,7 +188,10 @@ imgUploadForm.addEventListener('submit', (evt) => {
       scaleControlValue.value = '100%';
       imgPreview.style.transform = 'scale(1)';
       imgPreview.style.filter = 'none';
+      document.querySelector('.effect__level-slider').noUiSlider.set(100);
     })
+
+
     .catch(() => {
       document.body.appendChild(errorMessage);
       document.addEventListener('keydown', (evtKeydown) => onMessageEscKeydown(evtKeydown, () => closeMessage(errorMessage, onMessageEscKeydown, onMessageClick)));

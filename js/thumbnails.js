@@ -1,4 +1,3 @@
-// import { createPosts } from './data.js';
 import { getData } from './api.js';
 import { openBigPicture } from './fullSize.js';
 
@@ -33,17 +32,16 @@ const clearUsersPictures = () => {
   containerUsersPictures.innerHTML = '';
 };
 
-// 11ДЗ
-
-getData().then((data) => {
-  usersPictures = data;
-  renderUsersPictures(usersPictures);
-}).catch(() => {
-  const errorTemplate = document.querySelector('#data-error').content.cloneNode(true);
-  document.body.appendChild(errorTemplate);
-  setTimeout(() => {
-    document.body.removeChild(document.querySelector('.data-error'));
-  }, 5000);
-});
-
-export { renderUsersPictures, clearUsersPictures };
+function fetchDataAndRender() {
+  getData().then((data) => {
+    usersPictures = data;
+    renderUsersPictures(usersPictures);
+  }).catch(() => {
+    const errorTemplate = document.querySelector('#data-error').content.cloneNode(true);
+    document.body.appendChild(errorTemplate);
+    setTimeout(() => {
+      document.body.removeChild(document.querySelector('. data-error'));
+    }, 5000);
+  });
+}
+export { renderUsersPictures, clearUsersPictures, fetchDataAndRender };
