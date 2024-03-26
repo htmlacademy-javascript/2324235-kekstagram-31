@@ -1,7 +1,8 @@
-const API_URL = 'https://31.javascript.htmlacademy.pro/kekstagram/data';
+const API_URL_BASE = 'https://31.javascript.htmlacademy.pro/kekstagram/data';
+const API_URL_SEND = 'https://31.javascript.htmlacademy.pro/kekstagram/';
 
 const getData = () =>
-  fetch(API_URL)
+  fetch(API_URL_BASE)
     .then((response) => {
       if (response.ok) {
         return response.json();
@@ -11,7 +12,7 @@ const getData = () =>
     });
 
 const sendData = (data) =>
-  fetch(API_URL, {
+  fetch(API_URL_SEND, {
     method: 'POST',
     body: data,
   })
