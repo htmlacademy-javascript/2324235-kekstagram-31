@@ -19,23 +19,24 @@ inputFile.addEventListener('change', () => {
   document.body.classList.add('modal-open');
 });
 
+function closeButton() {
+  formOverlay.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+  document.addEventListener('keydown', onEscKeyDown);
+
+  inputFile.value = '';
+  document.querySelector('.scale__control--value').value = `${100}%`;
+  document.querySelector('.img-upload__preview').style.transform = '';
+  document.querySelector('.effect-level__slider').noUiSlider.set(100);
+  document.querySelector('.img-upload__preview').style.filter = 'none';
+  document.querySelector('.img-upload__effect-level').classList.add('hidden');
+};
+
 cancelButton.addEventListener('click', () => {
   formOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
+  closeButton();
 });
-
-document.addEventListener('keydown', onEscKeyDown);
-
-// cancelButton.addEventListener('click', () => {
-//   formOverlay.classList.add('hidden');
-//   document.body.classList.remove('modal-open');
-
-inputFile.value = '';
-const otherInputs = imgUploadForm.querySelectorAll('otherInput');
-otherInputs.forEach((otherInput) => {
-  otherInput.value = '';
-});
-// });
 
 const scaleControlSmaller = document.querySelector('.scale__control--smaller');
 const scaleControlBigger = document.querySelector('.scale__control--bigger');
@@ -135,15 +136,11 @@ commentInput.addEventListener('keydown', (evt) => {
 
 submitButton.disabled = true;
 
-const isValid = pristine.validate();
-
-if (isValid) {
-  imgUploadForm.submit();
-  imgUploadForm.reset();
-  scaleControlValue.value = '100%';
-  imgPreview.style.transform = 'scale(1)';
-  imgPreview.style.filter = 'none';
-}
+imgUploadForm.submit();
+imgUploadForm.reset();
+scaleControlValue.value = '100%';
+imgPreview.style.transform = 'scale(1)';
+imgPreview.style.filter = 'none';
 submitButton.disabled = false;
 
 const successTemplate = document.querySelector('#success').content;
@@ -174,7 +171,11 @@ function onMessageClick(evt, message, closeHandler) {
 }
 
 imgUploadForm.addEventListener('submit', (evt) => {
+  const isValid = pristine.validate();
   evt.preventDefault();
+  if (!isValid) {
+    return;
+  }
   submitButton.disabled = true;
   const formData = new FormData(imgUploadForm);
   sendData(formData)
@@ -188,7 +189,7 @@ imgUploadForm.addEventListener('submit', (evt) => {
       scaleControlValue.value = '100%';
       imgPreview.style.transform = 'scale(1)';
       imgPreview.style.filter = 'none';
-      document.querySelector('.effect__level-slider').noUiSlider.set(100);
+      document.querySelector('.effect-level__slider').noUiSlider.set(100);
     })
 
 
