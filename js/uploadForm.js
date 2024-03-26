@@ -7,7 +7,7 @@ const cancelButton = document.querySelector('.img-upload__cancel');
 const submitButton = imgUploadForm.querySelector('.img-upload__submit');
 const hashtagInput = imgUploadForm.querySelector('.text__hashtags');
 const commentInput = imgUploadForm.querySelector('.text__description');
-const isEscapeKey = (evt) => evt.key === 'Escape';
+// const isEscapeKey = (evt) => evt.key === 'Escape';
 
 const pristine = new Pristine(imgUploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -61,7 +61,7 @@ scaleControlBigger.addEventListener('click', () => {
   }
 });
 
-let message = 'Неверный формат хэштега.';
+let hashtagErrorMessage = 'Неверный формат хэштега.';
 pristine.addValidator(hashtagInput, (value) => {
   if (!value) {
     return true;
@@ -70,7 +70,7 @@ pristine.addValidator(hashtagInput, (value) => {
   const hashtags = value.split(' ');
 
   if (hashtags.length > 5) {
-    message = 'Слишком много хэштегов. Максимум 5.';
+    hashtagErrorMessage = 'Слишком много хэштегов. Максимум 5.';
     return false;
   }
 
@@ -78,7 +78,7 @@ pristine.addValidator(hashtagInput, (value) => {
   const hashDuplicates = new Set(lowerCaseHashtags).size !== lowerCaseHashtags.length;
 
   if (hashDuplicates) {
-    message = 'Хэштеги не должны повторяться.';
+    hashtagErrorMessage = 'Хэштеги не должны повторяться.';
     return false;
   }
 
@@ -88,21 +88,21 @@ pristine.addValidator(hashtagInput, (value) => {
       return false;
     }
     if (!hashtag.startsWith('#')) {
-      message = 'Хэштег должен начинаться с символа #.';
+      hashtagErrorMessage = 'Хэштег должен начинаться с символа #.';
       return false;
     }
     if (hashtag.length > 20) {
-      message = 'Хэштег не может быть длиннее 20 символов.';
+      hashtagErrorMessage = 'Хэштег не может быть длиннее 20 символов.';
       return false;
     }
 
     if (/[^a-zа-яё0-9#]/i.test(hashtag)) {
-      message = 'Хэштег может содержать только буквы и цифры.';
+      hashtagErrorMessage = 'Хэштег может содержать только буквы и цифры.';
       return false;
     }
   }
   return true;
-}, () => message, 2);
+}, () => hashtagErrorMessage, 2);
 
 hashtagInput.addEventListener('focus', () => {
   document.removeEventListener('keydown', onEscKeyDown);
@@ -153,145 +153,55 @@ imgUploadForm.addEventListener('submit', (evt) => {
 
 // 11 ДЗ
 
-imgUploadForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-
-  submitButton.disabled = true;
-
-  const formData = new FormData(imgUploadForm);
-
-  sendData(formData)
-    .then(() => {
-      // Обработка успешной отправки данных
-    })
-    .catch(() => {
-      // Обработка ошибки отправки данных
-    })
-    .finally(() => {
-      submitButton.disabled = false;
-    });
-});
-
-// Выбираем шаблон сообщения об успехе и создаем элемент сообщения
 const successTemplate = document.querySelector('#success').content;
 const successMessage = successTemplate.querySelector('.success').cloneNode(true);
-
-// Функция для закрытия сообщения об успехе
-function closeSuccessMessage() {
-  successMessage.remove();
-  document.removeEventListener('keydown', onSuccessMessageEscKeydown);
-  successMessage.removeEventListener('click', onSuccessMessageClick);
-}
-
-// Обработчики событий для закрытия сообщения об успехе
-function onSuccessMessageEscKeydown(evt) {
-  if (isEscapeKey(evt)) {
-    closeSuccessMessage();
-  }
-}
-
-function onSuccessMessageClick(evt) {
-  if (!evt.target.closest('.success__inner')) {
-    closeSuccessMessage();
-  }
-}
-
-imgUploadForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-
-  // Блокировка кнопки "Отправить" на время выполнения запроса
-  submitButton.disabled = true;
-
-  const formData = new FormData(imgUploadForm);
-
-  sendData(formData)
-    .then(() => {
-      // Обработка успешной отправки данных
-      // Закрываем форму и показываем сообщение об успешной отправке
-      formOverlay.classList.add('hidden');
-      document.body.classList.remove('modal-open');
-      document.body.appendChild(successMessage);
-
-      // Добавляем обработчики событий для закрытия сообщения об успехе
-      document.addEventListener('keydown', onSuccessMessageEscKeydown);
-      successMessage.addEventListener('click', onSuccessMessageClick);
-
-      // Сбрасываем форму в исходное состояние
-      imgUploadForm.reset();
-      scaleControlValue.value = '100%';
-      imgPreview.style.transform = 'scale(1)';
-      imgPreview.style.filter = 'none';
-    })
-    .catch(() => {
-      // Обработка ошибки отправки данных
-    })
-    .finally(() => {
-      // В любом случае снова активируем кнопку "Отправить"
-      submitButton.disabled = false;
-    });
-});
-
-// Выбираем шаблон сообщения об ошибке и создаем элемент сообщения
 const errorTemplate = document.querySelector('#error').content;
 const errorMessage = errorTemplate.querySelector('.error').cloneNode(true);
 
-// Функция для закрытия сообщения об ошибке
-function closeErrorMessage() {
-  errorMessage.remove();
-  document.removeEventListener('keydown', onErrorMessageEscKeydown);
-  errorMessage.removeEventListener('click', onErrorMessageClick);
+function isEscapeKey(evt) {
+  return evt.key === 'Escape';
 }
 
-// Обработчики событий для закрытия сообщения об ошибке
-function onErrorMessageEscKeydown(evt) {
+function closeMessage(message, escKeydownHandler, clickHandler) {
+  message.remove();
+  document.removeEventListener('keydown', escKeydownHandler);
+  message.removeEventListener('click', clickHandler);
+}
+
+function onMessageEscKeydown(evt, closeHandler) {
   if (isEscapeKey(evt)) {
-    closeErrorMessage();
+    closeHandler();
   }
 }
 
-function onErrorMessageClick(evt) {
-  if (!evt.target.closest('.error__inner')) {
-    closeErrorMessage();
+function onMessageClick(evt, message, closeHandler) {
+  if (!evt.target.closest('.success__inner') || evt.target.closest('.success__button')) {
+    closeHandler();
   }
 }
 
 imgUploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
-
-  // Блокировка кнопки "Отправить" на время выполнения запроса
   submitButton.disabled = true;
-
   const formData = new FormData(imgUploadForm);
-
   sendData(formData)
     .then(() => {
-      // Обработка успешной отправки данных
-      // Закрываем форму и показываем сообщение об успешной отправке
       formOverlay.classList.add('hidden');
       document.body.classList.remove('modal-open');
       document.body.appendChild(successMessage);
-
-      // Добавляем обработчики событий для закрытия сообщения об успехе
-      document.addEventListener('keydown', onSuccessMessageEscKeydown);
-      successMessage.addEventListener('click', onSuccessMessageClick);
-
-      // Сбрасываем форму в исходное состояние
+      document.addEventListener('keydown', (evtKeydown) => onMessageEscKeydown(evtKeydown, () => closeMessage(successMessage, onMessageEscKeydown, onMessageClick)));
+      successMessage.addEventListener('click', (evtClick) => onMessageClick(evtClick, successMessage, () => closeMessage(successMessage, onMessageEscKeydown, onMessageClick)));
       imgUploadForm.reset();
       scaleControlValue.value = '100%';
       imgPreview.style.transform = 'scale(1)';
       imgPreview.style.filter = 'none';
     })
     .catch(() => {
-      // Обработка ошибки отправки данных
-      // Показываем сообщение об ошибке
       document.body.appendChild(errorMessage);
-
-      // Добавляем обработчики событий для закрытия сообщения об ошибке
-      document.addEventListener('keydown', onErrorMessageEscKeydown);
-      errorMessage.addEventListener('click', onErrorMessageClick);
+      document.addEventListener('keydown', (evtKeydown) => onMessageEscKeydown(evtKeydown, () => closeMessage(errorMessage, onMessageEscKeydown, onMessageClick)));
+      errorMessage.addEventListener('click', (evtClick) => onMessageClick(evtClick, errorMessage, () => closeMessage(errorMessage, onMessageEscKeydown, onMessageClick)));
     })
     .finally(() => {
-      // В любом случае снова активируем кнопку "Отправить" после выполнения запроса
       submitButton.disabled = false;
     });
 });

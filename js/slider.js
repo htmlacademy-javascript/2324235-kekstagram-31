@@ -1,5 +1,6 @@
 import { imgPreview } from './uploadForm.js';
 
+const effectLevelSlider = document.querySelector('.img-upload__effect-level');
 const slider = document.querySelector('.effect-level__slider');
 if (slider) {
   noUiSlider.create(slider, {
@@ -48,7 +49,6 @@ if (slider) {
   });
 
   document.querySelector('.effects__list').addEventListener('change', (evt) => {
-    const effectLevelSlider = document.querySelector('.img-upload__effect-level');
     if (evt.target.value === 'none') {
       effectLevelSlider.classList.add('hidden');
     } else {
@@ -58,7 +58,6 @@ if (slider) {
   });
 
   window.addEventListener('load', () => {
-    const effectLevelSlider = document.querySelector('.img-upload__effect-level');
     const currentEffect = document.querySelector('input[name="effect"]:checked').value;
     if (currentEffect === 'none') {
       effectLevelSlider.classList.add('hidden');
