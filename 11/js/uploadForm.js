@@ -189,11 +189,26 @@ imgUploadForm.addEventListener('submit', (evt) => {
     .catch(() => {
       document.body.appendChild(errorMessage);
       document.addEventListener('keydown', (evtKeydown) => onMessageEscKeydown(evtKeydown, () => closeMessage(errorMessage, onMessageEscKeydown, onMessageClick)));
-      errorMessage.addEventListener('click', (evtClick) => onMessageClick(evtClick, errorMessage, () => closeMessage(errorMessage, onMessageEscKeydown, onMessageClick)));
+
+      const errorButton = errorMessage.querySelector('.error__button');
+      errorButton.addEventListener('click', () => {
+        closeMessage(errorMessage, onMessageEscKeydown, onMessageClick);
+      });
+      errorMessage.addEventListener('click', (evtClick) => {
+        if (evtClick.target === errorMessage) {
+          closeMessage(errorMessage, onMessageEscKeydown, onMessageClick);
+        }
+      });
+
+      const errorText = errorMessage.querySelector('.error__inner');
+      errorText.addEventListener('click', (evtClick) => {
+        evtClick.stopPropagation();
+      });
     })
     .finally(() => {
       submitButton.disabled = false;
     });
 });
+
 
 export { imgPreview };
