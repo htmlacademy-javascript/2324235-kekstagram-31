@@ -25,12 +25,13 @@ function closeButton() {
   document.addEventListener('keydown', onEscKeyDown);
 
   inputFile.value = '';
+  imgUploadForm.reset();
   document.querySelector('.scale__control--value').value = `${100}%`;
   document.querySelector('.img-upload__preview').style.transform = '';
   document.querySelector('.effect-level__slider').noUiSlider.set(100);
   document.querySelector('.img-upload__preview').style.filter = 'none';
   document.querySelector('.img-upload__effect-level').classList.add('hidden');
-};
+}
 
 cancelButton.addEventListener('click', () => {
   formOverlay.classList.add('hidden');
@@ -133,15 +134,6 @@ commentInput.addEventListener('keydown', (evt) => {
     evt.stopPropagation();
   }
 });
-
-submitButton.disabled = true;
-
-imgUploadForm.submit();
-imgUploadForm.reset();
-scaleControlValue.value = '100%';
-imgPreview.style.transform = 'scale(1)';
-imgPreview.style.filter = 'none';
-submitButton.disabled = false;
 
 const successTemplate = document.querySelector('#success').content;
 const successMessage = successTemplate.querySelector('.success').cloneNode(true);
