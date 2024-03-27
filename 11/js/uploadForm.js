@@ -7,6 +7,7 @@ const cancelButton = document.querySelector('.img-upload__cancel');
 const submitButton = imgUploadForm.querySelector('.img-upload__submit');
 const hashtagInput = imgUploadForm.querySelector('.text__hashtags');
 const commentInput = imgUploadForm.querySelector('.text__description');
+const imgPreview = document.querySelector('.img-upload__preview img');
 
 const pristine = new Pristine(imgUploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -28,6 +29,7 @@ function closeButton() {
   imgUploadForm.reset();
   document.querySelector('.scale__control--value').value = `${100}%`;
   document.querySelector('.img-upload__preview').style.transform = '';
+  imgPreview.style.transform = 'scale(1)';
   document.querySelector('.effect-level__slider').noUiSlider.set(100);
   document.querySelector('.img-upload__preview').style.filter = 'none';
   document.querySelector('.img-upload__effect-level').classList.add('hidden');
@@ -42,7 +44,6 @@ cancelButton.addEventListener('click', () => {
 const scaleControlSmaller = document.querySelector('.scale__control--smaller');
 const scaleControlBigger = document.querySelector('.scale__control--bigger');
 const scaleControlValue = document.querySelector('.scale__control--value');
-const imgPreview = document.querySelector('.img-upload__preview img');
 
 scaleControlSmaller.addEventListener('click', () => {
   let scaleValue = parseInt(scaleControlValue.value, 10);
