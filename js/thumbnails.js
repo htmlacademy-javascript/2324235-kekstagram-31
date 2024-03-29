@@ -32,7 +32,7 @@ const clearUsersPictures = () => {
   containerUsersPictures.innerHTML = '';
 };
 
-function getFetchDataAndRender() {
+const getFetchDataAndRender = () => {
   getData().then((data) => {
     usersPictures = data;
     renderUsersPictures(usersPictures);
@@ -43,6 +43,6 @@ function getFetchDataAndRender() {
       document.body.removeChild(document.querySelector('.data-error'));
     }, 5000);
   });
-}
+};
 
 export { renderUsersPictures, clearUsersPictures, getFetchDataAndRender };
