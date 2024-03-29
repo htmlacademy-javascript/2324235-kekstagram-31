@@ -8,6 +8,22 @@ const submitButton = imgUploadForm.querySelector('.img-upload__submit');
 const hashtagInput = imgUploadForm.querySelector('.text__hashtags');
 const commentInput = imgUploadForm.querySelector('.text__description');
 const imgPreview = document.querySelector('.img-upload__preview img');
+document.querySelector('.scale__control--value').value = `${100}%`;
+document.querySelector('.img-upload__preview').style.transform = '';
+
+imgPreview.style.transform = 'scale(1)';
+document.querySelector('.effect-level__slider').noUiSlider.set(100);
+document.querySelector('.img-upload__preview').style.filter = 'none';
+document.querySelector('.img-upload__effect-level').classList.add('hidden');
+
+const scaleControlSmaller = document.querySelector('.scale__control--smaller');
+const scaleControlBigger = document.querySelector('.scale__control--bigger');
+const scaleControlValue = document.querySelector('.scale__control--value');
+
+const successTemplate = document.querySelector('#success').content;
+const successMessage = successTemplate.querySelector('.success').cloneNode(true);
+const errorTemplate = document.querySelector('#error').content;
+const errorMessage = errorTemplate.querySelector('.error').cloneNode(true);
 
 const pristine = new Pristine(imgUploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -27,12 +43,6 @@ function onCloseButton() {
 
   inputFile.value = '';
   imgUploadForm.reset();
-  document.querySelector('.scale__control--value').value = `${100}%`;
-  document.querySelector('.img-upload__preview').style.transform = '';
-  imgPreview.style.transform = 'scale(1)';
-  document.querySelector('.effect-level__slider').noUiSlider.set(100);
-  document.querySelector('.img-upload__preview').style.filter = 'none';
-  document.querySelector('.img-upload__effect-level').classList.add('hidden');
 }
 
 cancelButton.addEventListener('click', () => {
@@ -40,10 +50,6 @@ cancelButton.addEventListener('click', () => {
   document.body.classList.remove('modal-open');
   onCloseButton();
 });
-
-const scaleControlSmaller = document.querySelector('.scale__control--smaller');
-const scaleControlBigger = document.querySelector('.scale__control--bigger');
-const scaleControlValue = document.querySelector('.scale__control--value');
 
 scaleControlSmaller.addEventListener('click', () => {
   let scaleValue = parseInt(scaleControlValue.value, 10);
@@ -136,11 +142,6 @@ commentInput.addEventListener('keydown', (evt) => {
   }
 });
 
-const successTemplate = document.querySelector('#success').content;
-const successMessage = successTemplate.querySelector('.success').cloneNode(true);
-const errorTemplate = document.querySelector('#error').content;
-const errorMessage = errorTemplate.querySelector('.error').cloneNode(true);
-
 function isEscapeKey(evt) {
   return evt.key === 'Escape';
 }
@@ -177,7 +178,7 @@ imgUploadForm.addEventListener('submit', (evt) => {
       document.body.classList.remove('modal-open');
       document.body.appendChild(successMessage);
       document.addEventListener('keydown', (evtKeydown) => onMessageEscKeydown(evtKeydown, () => onCloseMessage(successMessage, onMessageEscKeydown, onMessageClick)));
-      successMessage.addEventListener('click', (evtClick) => onMessageClick(evtClick, successMessage, () => onCloseMessage(successMessage, onMessageEscKeydown, onMessageClick)));
+      successMessage.addEventListener('click', (evtClick) => onMessageClick(evtClick, () => onCloseMessage(successMessage, onMessageEscKeydown, onMessageClick)));
       imgUploadForm.reset();
       scaleControlValue.value = '100%';
       imgPreview.style.transform = 'scale(1)';
