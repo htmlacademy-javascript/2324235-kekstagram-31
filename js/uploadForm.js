@@ -8,13 +8,12 @@ const submitButton = imgUploadForm.querySelector('.img-upload__submit');
 const hashtagInput = imgUploadForm.querySelector('.text__hashtags');
 const commentInput = imgUploadForm.querySelector('.text__description');
 const imgPreview = document.querySelector('.img-upload__preview img');
-document.querySelector('.scale__control--value').value = `${100}%`;
-document.querySelector('.img-upload__preview').style.transform = '';
+const scale = document.querySelector('.scale__control--value');
 
-imgPreview.style.transform = 'scale(1)';
-document.querySelector('.effect-level__slider').noUiSlider.set(100);
-document.querySelector('.img-upload__preview').style.filter = 'none';
-document.querySelector('.img-upload__effect-level').classList.add('hidden');
+
+const slider = document.querySelector('.effect-level__slider');
+const preview = document.querySelector('.img-upload__preview img');
+const effect = document.querySelector('.img-upload__effect-level');
 
 const scaleControlSmaller = document.querySelector('.scale__control--smaller');
 const scaleControlBigger = document.querySelector('.scale__control--bigger');
@@ -36,11 +35,17 @@ inputFile.addEventListener('change', () => {
   document.body.classList.add('modal-open');
 });
 
-function onCloseButton() {
+function resetFormHandler() {
   formOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.addEventListener('keydown', onEscKeyDown);
-
+  imgPreview.style.transform = 'scale(1)';
+  slider.noUiSlider.set(100);
+  preview.style.filter = 'none';
+  effect.classList.add('hidden');
+  scale.value = `${100}%`;
+  preview.style.transform = '';
+  effect.classList.add('hidden');
   inputFile.value = '';
   imgUploadForm.reset();
 }
@@ -48,7 +53,7 @@ function onCloseButton() {
 cancelButton.addEventListener('click', () => {
   formOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  onCloseButton();
+  resetFormHandler();
 });
 
 scaleControlSmaller.addEventListener('click', () => {
@@ -179,11 +184,7 @@ imgUploadForm.addEventListener('submit', (evt) => {
       document.body.appendChild(successMessage);
       document.addEventListener('keydown', (evtKeydown) => onMessageEscKeydown(evtKeydown, () => onCloseMessage(successMessage, onMessageEscKeydown, onMessageClick)));
       successMessage.addEventListener('click', (evtClick) => onMessageClick(evtClick, () => onCloseMessage(successMessage, onMessageEscKeydown, onMessageClick)));
-      imgUploadForm.reset();
-      scaleControlValue.value = '100%';
-      imgPreview.style.transform = 'scale(1)';
-      imgPreview.style.filter = 'none';
-      document.querySelector('.effect-level__slider').noUiSlider.set(100);
+      resetFormHandler();
     })
 
 
