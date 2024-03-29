@@ -20,7 +20,7 @@ inputFile.addEventListener('change', () => {
   document.body.classList.add('modal-open');
 });
 
-function closeButton() {
+function onCloseButton() {
   formOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.addEventListener('keydown', onEscKeyDown);
@@ -38,7 +38,7 @@ function closeButton() {
 cancelButton.addEventListener('click', () => {
   formOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  closeButton();
+  onCloseButton();
 });
 
 const scaleControlSmaller = document.querySelector('.scale__control--smaller');
@@ -145,7 +145,7 @@ function isEscapeKey(evt) {
   return evt.key === 'Escape';
 }
 
-function closeMessage(message, escKeydownHandler, clickHandler) {
+function onCloseMessage(message, escKeydownHandler, clickHandler) {
   message.remove();
   document.removeEventListener('keydown', escKeydownHandler);
   message.removeEventListener('click', clickHandler);
@@ -157,7 +157,7 @@ function onMessageEscKeydown(evt, closeHandler) {
   }
 }
 
-function onMessageClick(evt, message, closeHandler) {
+function onMessageClick(evt, closeHandler) {
   if (!evt.target.closest('.success__inner') || evt.target.closest('.success__button')) {
     closeHandler();
   }
@@ -176,8 +176,8 @@ imgUploadForm.addEventListener('submit', (evt) => {
       formOverlay.classList.add('hidden');
       document.body.classList.remove('modal-open');
       document.body.appendChild(successMessage);
-      document.addEventListener('keydown', (evtKeydown) => onMessageEscKeydown(evtKeydown, () => closeMessage(successMessage, onMessageEscKeydown, onMessageClick)));
-      successMessage.addEventListener('click', (evtClick) => onMessageClick(evtClick, successMessage, () => closeMessage(successMessage, onMessageEscKeydown, onMessageClick)));
+      document.addEventListener('keydown', (evtKeydown) => onMessageEscKeydown(evtKeydown, () => onCloseMessage(successMessage, onMessageEscKeydown, onMessageClick)));
+      successMessage.addEventListener('click', (evtClick) => onMessageClick(evtClick, successMessage, () => onCloseMessage(successMessage, onMessageEscKeydown, onMessageClick)));
       imgUploadForm.reset();
       scaleControlValue.value = '100%';
       imgPreview.style.transform = 'scale(1)';
@@ -188,15 +188,15 @@ imgUploadForm.addEventListener('submit', (evt) => {
 
     .catch(() => {
       document.body.appendChild(errorMessage);
-      document.addEventListener('keydown', (evtKeydown) => onMessageEscKeydown(evtKeydown, () => closeMessage(errorMessage, onMessageEscKeydown, onMessageClick)));
+      document.addEventListener('keydown', (evtKeydown) => onMessageEscKeydown(evtKeydown, () => onCloseMessage(errorMessage, onMessageEscKeydown, onMessageClick)));
 
       const errorButton = errorMessage.querySelector('.error__button');
       errorButton.addEventListener('click', () => {
-        closeMessage(errorMessage, onMessageEscKeydown, onMessageClick);
+        onCloseMessage(errorMessage, onMessageEscKeydown, onMessageClick);
       });
       errorMessage.addEventListener('click', (evtClick) => {
         if (evtClick.target === errorMessage) {
-          closeMessage(errorMessage, onMessageEscKeydown, onMessageClick);
+          onCloseMessage(errorMessage, onMessageEscKeydown, onMessageClick);
         }
       });
 

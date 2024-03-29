@@ -32,7 +32,7 @@ const clearUsersPictures = () => {
   containerUsersPictures.innerHTML = '';
 };
 
-function fetchDataAndRender() {
+function getFetchDataAndRender() {
   getData().then((data) => {
     usersPictures = data;
     renderUsersPictures(usersPictures);
@@ -40,8 +40,9 @@ function fetchDataAndRender() {
     const errorTemplate = document.querySelector('#data-error').content.cloneNode(true);
     document.body.appendChild(errorTemplate);
     setTimeout(() => {
-      document.body.removeChild(document.querySelector('. data-error'));
+      document.body.removeChild(document.querySelector('.data-error'));
     }, 5000);
   });
 }
-export { renderUsersPictures, clearUsersPictures, fetchDataAndRender };
+
+export { renderUsersPictures, clearUsersPictures, getFetchDataAndRender };

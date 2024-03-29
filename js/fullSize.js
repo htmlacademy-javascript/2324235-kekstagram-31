@@ -14,14 +14,14 @@ let currentOpenPhoto = null;
 let currentCommentsCount = 0;
 const COMMENTS_LOAD_STEP = 5;
 
-const onBigPictureKeydown = (evt) => {
+const onUserBigPictureKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     closeBigPicture();
   }
 };
 
-const updateAndRenderComments = () => {
+const onCommentsUpdateAndRender = () => {
   currentCommentsCount += COMMENTS_LOAD_STEP;
   renderComments(currentOpenPhoto.comments);
   socialCommentCount.textContent = Math.min(currentCommentsCount, currentOpenPhoto.comments.length);
@@ -55,7 +55,7 @@ function renderComments(comments) {
 function openBigPicture(photo) {
   userBigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  document.addEventListener('keydown', onBigPictureKeydown);
+  document.addEventListener('keydown', onUserBigPictureKeydown);
   currentOpenPhoto = photo;
 
   likesCounter.textContent = photo.likes;
@@ -80,14 +80,14 @@ function openBigPicture(photo) {
 
   renderComments(photo.comments);
 
-  commentsLoader.addEventListener('click', updateAndRenderComments);
+  commentsLoader.addEventListener('click', onCommentsUpdateAndRender);
 }
 
 function closeBigPicture() {
   userBigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  document.removeEventListener('keydown', onBigPictureKeydown);
-  commentsLoader.removeEventListener('click', updateAndRenderComments);
+  document.removeEventListener('keydown', onUserBigPictureKeydown);
+  commentsLoader.removeEventListener('click', onCommentsUpdateAndRender);
 }
 
 userBigPictureCancel.addEventListener('click', () => {
@@ -100,4 +100,4 @@ userBigPictureCancel.addEventListener('keydown', (evt) => {
   }
 });
 
-export { openBigPicture, closeBigPicture, onBigPictureKeydown };
+export { openBigPicture, closeBigPicture, onUserBigPictureKeydown };
