@@ -23,21 +23,6 @@ const getRandomPictures = (pictures) => {
 
 const getDiscussedPictures = (pictures) => pictures.slice().sort((a, b) => b.comments.length - a.comments.length);
 
-filterDefault.addEventListener('click', () => {
-  clearUsersPictures();
-  renderUsersPictures(usersPictures);
-});
-
-filterRandom.addEventListener('click', () => {
-  clearUsersPictures();
-  renderUsersPictures(getRandomPictures(usersPictures));
-});
-
-filterDiscussed.addEventListener('click', () => {
-  clearUsersPictures();
-  renderUsersPictures(getDiscussedPictures(usersPictures));
-});
-
 getData().then((data) => {
   usersPictures = data;
   renderUsersPictures(data);
@@ -58,24 +43,6 @@ const setActiveFilter = (activeFilter) => {
   });
   activeFilter.classList.add('img-filters__button--active');
 };
-
-filterDefault.addEventListener('click', () => {
-  clearUsersPictures();
-  renderUsersPictures(usersPictures);
-  setActiveFilter(filterDefault);
-});
-
-filterRandom.addEventListener('click', () => {
-  clearUsersPictures();
-  renderUsersPictures(getRandomPictures(usersPictures));
-  setActiveFilter(filterRandom);
-});
-
-filterDiscussed.addEventListener('click', () => {
-  clearUsersPictures();
-  renderUsersPictures(getDiscussedPictures(usersPictures));
-  setActiveFilter(filterDiscussed);
-});
 
 filterDefault.addEventListener('click', debounce(() => {
   clearUsersPictures();

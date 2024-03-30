@@ -31,5 +31,4 @@ const clearUsersPictures = () => {
   pictures.forEach((picture) => picture.remove());
 };
 
-
 export { renderUsersPictures, clearUsersPictures };
