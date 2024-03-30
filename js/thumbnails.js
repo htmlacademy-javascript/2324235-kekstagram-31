@@ -27,7 +27,8 @@ const renderUsersPictures = (pictures) => {
 };
 
 const clearUsersPictures = () => {
-  containerUsersPictures.innerHTML = '';
+  const pictures = containerUsersPictures.querySelectorAll('.picture');
+  pictures.forEach((picture) => picture.remove());
 };
 
 
