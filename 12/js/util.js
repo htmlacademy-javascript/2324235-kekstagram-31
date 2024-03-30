@@ -11,4 +11,19 @@ const isEscapeKey = (evt) => evt.key === 'Escape';
 
 const isEnterKey = (evt) => evt.key === 'Enter';
 
-export { getRandomInteger, getRandomArrayElement, isEscapeKey, isEnterKey };
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    // Функция, которая будет выполнена после ожидания.
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    // Очистка текущего таймаута перед установкой нового.
+    clearTimeout(timeout);
+    // Установка нового таймаута.
+    timeout = setTimeout(later, wait);
+  };
+}
+
+export { getRandomInteger, getRandomArrayElement, isEscapeKey, isEnterKey, debounce };
