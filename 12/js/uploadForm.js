@@ -7,7 +7,20 @@ const cancelButton = document.querySelector('.img-upload__cancel');
 const submitButton = imgUploadForm.querySelector('.img-upload__submit');
 const hashtagInput = imgUploadForm.querySelector('.text__hashtags');
 const commentInput = imgUploadForm.querySelector('.text__description');
+const scale = document.querySelector('.scale__control--value');
+
+const slider = document.querySelector('.effect-level__slider');
 const imgPreview = document.querySelector('.img-upload__preview img');
+const effect = document.querySelector('.img-upload__effect-level');
+
+const scaleControlSmaller = document.querySelector('.scale__control--smaller');
+const scaleControlBigger = document.querySelector('.scale__control--bigger');
+const scaleControlValue = document.querySelector('.scale__control--value');
+
+const successTemplate = document.querySelector('#success').content;
+const successMessage = successTemplate.querySelector('.success').cloneNode(true);
+const errorTemplate = document.querySelector('#error').content;
+const errorMessage = errorTemplate.querySelector('.error').cloneNode(true);
 
 const pristine = new Pristine(imgUploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -20,30 +33,26 @@ inputFile.addEventListener('change', () => {
   document.body.classList.add('modal-open');
 });
 
-function onCloseButton() {
+function resetFormHandler() {
   formOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.addEventListener('keydown', onEscKeyDown);
-
+  imgPreview.style.transform = 'scale(1)';
+  slider.noUiSlider.set(100);
+  imgPreview.style.filter = 'none';
+  effect.classList.add('hidden');
+  scale.value = `${100}%`;
+  imgPreview.style.transform = '';
+  effect.classList.add('hidden');
   inputFile.value = '';
   imgUploadForm.reset();
-  document.querySelector('.scale__control--value').value = `${100}%`;
-  document.querySelector('.img-upload__preview').style.transform = '';
-  imgPreview.style.transform = 'scale(1)';
-  document.querySelector('.effect-level__slider').noUiSlider.set(100);
-  document.querySelector('.img-upload__preview').style.filter = 'none';
-  document.querySelector('.img-upload__effect-level').classList.add('hidden');
 }
 
 cancelButton.addEventListener('click', () => {
   formOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  onCloseButton();
+  resetFormHandler();
 });
-
-const scaleControlSmaller = document.querySelector('.scale__control--smaller');
-const scaleControlBigger = document.querySelector('.scale__control--bigger');
-const scaleControlValue = document.querySelector('.scale__control--value');
 
 scaleControlSmaller.addEventListener('click', () => {
   let scaleValue = parseInt(scaleControlValue.value, 10);
@@ -136,11 +145,6 @@ commentInput.addEventListener('keydown', (evt) => {
   }
 });
 
-const successTemplate = document.querySelector('#success').content;
-const successMessage = successTemplate.querySelector('.success').cloneNode(true);
-const errorTemplate = document.querySelector('#error').content;
-const errorMessage = errorTemplate.querySelector('.error').cloneNode(true);
-
 function isEscapeKey(evt) {
   return evt.key === 'Escape';
 }
@@ -177,12 +181,8 @@ imgUploadForm.addEventListener('submit', (evt) => {
       document.body.classList.remove('modal-open');
       document.body.appendChild(successMessage);
       document.addEventListener('keydown', (evtKeydown) => onMessageEscKeydown(evtKeydown, () => onCloseMessage(successMessage, onMessageEscKeydown, onMessageClick)));
-      successMessage.addEventListener('click', (evtClick) => onMessageClick(evtClick, successMessage, () => onCloseMessage(successMessage, onMessageEscKeydown, onMessageClick)));
-      imgUploadForm.reset();
-      scaleControlValue.value = '100%';
-      imgPreview.style.transform = 'scale(1)';
-      imgPreview.style.filter = 'none';
-      document.querySelector('.effect-level__slider').noUiSlider.set(100);
+      successMessage.addEventListener('click', (evtClick) => onMessageClick(evtClick, () => onCloseMessage(successMessage, onMessageEscKeydown, onMessageClick)));
+      resetFormHandler();
     })
 
 
