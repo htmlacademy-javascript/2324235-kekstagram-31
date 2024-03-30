@@ -14,14 +14,12 @@ const isEnterKey = (evt) => evt.key === 'Enter';
 function debounce(func, wait) {
   let timeout;
   return function executedFunction(...args) {
-    // Функция, которая будет выполнена после ожидания.
     const later = () => {
       clearTimeout(timeout);
       func(...args);
     };
-    // Очистка текущего таймаута перед установкой нового.
+
     clearTimeout(timeout);
-    // Установка нового таймаута.
     timeout = setTimeout(later, wait);
   };
 }
