@@ -22,6 +22,8 @@ const successMessage = successTemplate.querySelector('.success').cloneNode(true)
 const errorTemplate = document.querySelector('#error').content;
 const errorMessage = errorTemplate.querySelector('.error').cloneNode(true);
 
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+
 const pristine = new Pristine(imgUploadForm, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper',
@@ -185,7 +187,6 @@ imgUploadForm.addEventListener('submit', (evt) => {
       resetFormHandler();
     })
 
-
     .catch(() => {
       document.body.appendChild(errorMessage);
       document.addEventListener('keydown', (evtKeydown) => onMessageEscKeydown(evtKeydown, () => onCloseMessage(errorMessage, onMessageEscKeydown, onMessageClick)));
@@ -212,19 +213,21 @@ imgUploadForm.addEventListener('submit', (evt) => {
 
 inputFile.addEventListener('change', function () {
   const file = this.files[0];
+  const fileName = file.name.toLowerCase();
   const reader = new FileReader();
 
   reader.onloadend = function () {
     imgPreview.src = reader.result;
   };
 
-  if (file) {
+  if (file && FILE_TYPES.some((it) => fileName.endsWith(it))) {
     reader.readAsDataURL(file);
+    submitButton.disabled = false;
   } else {
     imgPreview.src = '';
+    submitButton.disabled = true;
   }
 });
-
 
 const errorMessageElement = document.createElement('div');
 errorMessageElement.classList.add('error-message');

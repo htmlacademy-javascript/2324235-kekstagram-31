@@ -6,7 +6,7 @@ checkStringLength('проверяемая строка', 10);
 
 
 const checkPhrase = (palindromeString) => {
-  palindromeString = palindromeString.replaceAll(' ' , '').toLowerCase();
+  palindromeString = palindromeString.replaceAll(' ', '').toLowerCase();
 
   let checkPalindrome = '';
 

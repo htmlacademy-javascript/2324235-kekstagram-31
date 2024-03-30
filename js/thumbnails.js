@@ -4,7 +4,6 @@ const templateUserPicture = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 
-
 const containerUsersPictures = document.querySelector('.pictures');
 
 const renderUsersPictures = (pictures) => {
