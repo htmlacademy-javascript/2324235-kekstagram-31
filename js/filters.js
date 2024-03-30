@@ -1,9 +1,12 @@
-import { renderUsersPictures, clearUsersPictures, getFetchDataAndRender, usersPictures } from './thumbnails.js';
+import { renderUsersPictures, clearUsersPictures } from './thumbnails.js';
+import { getData } from './api.js';
 
 const imgFilters = document.querySelector('.img-filters');
 const filterDefault = imgFilters.querySelector('#filter-default');
 const filterRandom = imgFilters.querySelector('#filter-random');
 const filterDiscussed = imgFilters.querySelector('#filter-discussed');
+
+let usersPictures = null;
 
 const showImgFilters = () => {
   imgFilters.classList.remove('img-filters--inactive');
@@ -34,7 +37,14 @@ filterDiscussed.addEventListener('click', () => {
   renderUsersPictures(getDiscussedPictures(usersPictures));
 });
 
-getFetchDataAndRender().then(() => {
+getData().then((data) => {
+  usersPictures = data;
+  renderUsersPictures(data);
   showImgFilters();
-  renderUsersPictures(usersPictures);
+}).catch(() => {
+  const errorTemplate = document.querySelector('#data-error').content.cloneNode(true);
+  document.body.appendChild(errorTemplate);
+  setTimeout(() => {
+    document.body.removeChild(document.querySelector('.data-error'));
+  }, 5000);
 });
