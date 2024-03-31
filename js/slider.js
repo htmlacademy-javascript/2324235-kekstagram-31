@@ -1,14 +1,21 @@
 import { imgPreview } from './uploadForm.js';
 
+const START_VALUE = 100;
+const STEP_VALUE = 0.1;
+const MIN_RANGE = 0;
+const MAX_RANGE = 100;
+const BLUR_SCALE_FACTOR = 0.03;
+const BRIGHTNESS_SCALE_FACTOR = 0.02;
+
 const effectLevelSlider = document.querySelector('.img-upload__effect-level');
 const slider = document.querySelector('.effect-level__slider');
 if (slider) {
   noUiSlider.create(slider, {
-    start: [100],
-    step: 0.1,
+    start: [START_VALUE],
+    step: STEP_VALUE,
     range: {
-      'min': [0],
-      'max': [100]
+      'min': [MIN_RANGE],
+      'max': [MAX_RANGE]
     },
     format: {
       to: function (value) {
@@ -29,19 +36,19 @@ if (slider) {
 
     switch (currentEffect) {
       case 'chrome':
-        imgPreview.style.filter = `grayscale(${(value / 100).toFixed(1)})`;
+        imgPreview.style.filter = `grayscale(${(value / MAX_RANGE).toFixed(1)})`;
         break;
       case 'sepia':
-        imgPreview.style.filter = `sepia(${(value / 100).toFixed(1)})`;
+        imgPreview.style.filter = `sepia(${(value / MAX_RANGE).toFixed(1)})`;
         break;
       case 'marvin':
         imgPreview.style.filter = `invert(${value.toFixed(1)}%)`;
         break;
       case 'phobos':
-        imgPreview.style.filter = `blur(${(value * 0.03).toFixed(1)}px)`;
+        imgPreview.style.filter = `blur(${(value * BLUR_SCALE_FACTOR).toFixed(1)}px)`;
         break;
       case 'heat':
-        imgPreview.style.filter = `brightness(${(1 + (value * 0.02)).toFixed(1)})`;
+        imgPreview.style.filter = `brightness(${(1 + (value * BRIGHTNESS_SCALE_FACTOR)).toFixed(1)})`;
         break;
       default:
         imgPreview.style.filter = 'none';
@@ -54,7 +61,7 @@ if (slider) {
     } else {
       effectLevelSlider.classList.remove('hidden');
     }
-    slider.noUiSlider.set(100);
+    slider.noUiSlider.set(START_VALUE);
   });
 
   window.addEventListener('load', () => {

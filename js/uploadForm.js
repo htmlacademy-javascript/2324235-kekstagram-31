@@ -250,25 +250,6 @@ errorMessageElement.style.textAlign = 'center';
 errorMessageElement.style.zIndex = '1000';
 errorMessageElement.style.display = 'none';
 
-imgUploadForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-
-  const formData = new FormData(imgUploadForm);
-
-  sendData(formData)
-    .then(() => {
-      errorMessageElement.style.display = 'none';
-    })
-
-    .catch(() => {
-      errorMessageElement.style.display = 'block';
-      setTimeout(() => {
-        errorMessageElement.style.display = 'none';
-      }, 3000);
-
-    });
-});
-
 document.body.prepend(errorMessageElement);
 
 export { imgPreview };
