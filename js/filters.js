@@ -6,6 +6,8 @@ const imgFilters = document.querySelector('.img-filters');
 const filterDefault = imgFilters.querySelector('#filter-default');
 const filterRandom = imgFilters.querySelector('#filter-random');
 const filterDiscussed = imgFilters.querySelector('#filter-discussed');
+const filters = [filterDefault, filterRandom, filterDiscussed];
+const DEBOUNCE_DELAY = 500;
 
 let usersPictures = null;
 
@@ -35,8 +37,6 @@ getData().then((data) => {
   }, 5000);
 });
 
-const filters = [filterDefault, filterRandom, filterDiscussed];
-
 const setActiveFilter = (activeFilter) => {
   filters.forEach((filter) => {
     filter.classList.remove('img-filters__button--active');
@@ -48,16 +48,16 @@ filterDefault.addEventListener('click', debounce(() => {
   clearUsersPictures();
   renderUsersPictures(usersPictures);
   setActiveFilter(filterDefault);
-}, 500));
+}, DEBOUNCE_DELAY));
 
 filterRandom.addEventListener('click', debounce(() => {
   clearUsersPictures();
   renderUsersPictures(getRandomPictures(usersPictures));
   setActiveFilter(filterRandom);
-}, 500));
+}, DEBOUNCE_DELAY));
 
 filterDiscussed.addEventListener('click', debounce(() => {
   clearUsersPictures();
   renderUsersPictures(getDiscussedPictures(usersPictures));
   setActiveFilter(filterDiscussed);
-}, 500));
+}, DEBOUNCE_DELAY));

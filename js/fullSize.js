@@ -1,5 +1,6 @@
 import { isEscapeKey, isEnterKey } from './util.js';
 
+const COMMENTS_LOAD_STEP = 5;
 const userBigPicture = document.querySelector('.big-picture');
 const userBigPictureCancel = document.querySelector('.big-picture__cancel');
 const likesCounter = userBigPicture.querySelector('.likes-count');
@@ -12,7 +13,6 @@ const commentsLoader = userBigPicture.querySelector('.comments-loader');
 const socialComments = userBigPicture.querySelector('.social__comments');
 let currentOpenPhoto = null;
 let currentCommentsCount = 0;
-const COMMENTS_LOAD_STEP = 5;
 
 const onUserBigPictureKeydown = (evt) => {
   if (isEscapeKey(evt)) {

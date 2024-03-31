@@ -53,8 +53,8 @@ if (slider) {
       effectLevelSlider.classList.add('hidden');
     } else {
       effectLevelSlider.classList.remove('hidden');
-      slider.noUiSlider.set(100);
     }
+    slider.noUiSlider.set(100);
   });
 
   window.addEventListener('load', () => {
