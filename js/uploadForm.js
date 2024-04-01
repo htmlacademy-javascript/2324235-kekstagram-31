@@ -69,7 +69,7 @@ scaleControlSmaller.addEventListener('click', () => {
   let scaleValue = parseInt(scaleControlValue.value, SCALE_MIN);
   if (scaleValue > SCALE_STEP) {
     scaleValue -= SCALE_STEP;
-    scaleControlValue.value = `${scaleValue} %`;
+    scaleControlValue.value = `${scaleValue}%`;
     imgPreview.style.transform = `scale(${scaleValue / SCALE_MAX})`;
   }
 });
@@ -78,7 +78,7 @@ scaleControlBigger.addEventListener('click', () => {
   let scaleValue = parseInt(scaleControlValue.value, SCALE_MIN);
   if (scaleValue < SCALE_MAX) {
     scaleValue += SCALE_STEP;
-    scaleControlValue.value = `${scaleValue} %`;
+    scaleControlValue.value = `${scaleValue}%`;
     imgPreview.style.transform = `scale(${scaleValue / SCALE_MAX})`;
   }
 });
@@ -119,7 +119,7 @@ pristine.addValidator(hashtagInput, (value) => {
       return false;
     }
 
-    if (/[^a-zа-яё0-9#]/i.test(hashtag)) {
+    if (!/^#[a-zа-яё0-9]{1,19}$/i.test(hashtag)) {
       hashtagErrorMessage = 'Хэштег может содержать только буквы и цифры.';
       return false;
     }

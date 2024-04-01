@@ -1,73 +1,124 @@
 import { imgPreview } from './uploadForm.js';
 
-const START_VALUE = 100;
-const STEP_VALUE = 0.1;
-const MIN_RANGE = 0;
-const MAX_RANGE = 100;
-const BLUR_SCALE_FACTOR = 0.03;
-const BRIGHTNESS_SCALE_FACTOR = 0.02;
-
 const effectLevelSlider = document.querySelector('.img-upload__effect-level');
 const slider = document.querySelector('.effect-level__slider');
-if (slider) {
-  noUiSlider.create(slider, {
-    start: [START_VALUE],
-    step: STEP_VALUE,
-    range: {
-      'min': [MIN_RANGE],
-      'max': [MAX_RANGE]
-    },
-    format: {
-      to: function (value) {
-        return Number(value).toFixed(1);
-      },
-      from: function (value) {
-        return Number(value);
+
+const defaultSettings = {
+  animate: false,
+  start: 0,
+  step: 0.1,
+  connect: 'lower',
+  range: {
+    min: 0,
+    max: 1
+  },
+  format: {
+    to: function (value) {
+      if (Number.isInteger(value)) {
+        return value.toFixed(0);
       }
-    }
-  });
+      return value.toFixed(1);
+    },
+    from: function (value) {
+      return parseFloat(value);
+    },
+  },
+};
 
-  slider.noUiSlider.on('update', (values, handle) => {
-    const value = Number(values[handle]);
-    const effectLevelValue = document.querySelector('.effect-level__value');
-    effectLevelValue.value = value.toFixed(1);
+const CONFIGS = {
+  chrome: {
+    range: {
+      min: 0,
+      max: 1
+    },
+    start: 1,
+    step: 0.1,
+    format: defaultSettings
+  },
+  sepia: {
+    range: {
+      min: 0,
+      max: 1
+    },
+    start: 1,
+    step: 0.1,
+    format: defaultSettings
+  },
+  marvin: {
+    range: {
+      min: 0,
+      max: 100
+    },
+    start: 100,
+    step: 1
+  },
+  phobos: {
+    range: {
+      min: 0,
+      max: 3
+    },
+    start: 3,
+    step: 0.1,
+    format: defaultSettings
+  },
+  heat: {
+    range: {
+      min: 1,
+      max: 3
+    },
+    start: 3,
+    step: 0.1,
+    format: defaultSettings
+  },
+  none: defaultSettings
 
-    const currentEffect = document.querySelector('input[name="effect"]:checked').value;
+};
 
+document.querySelector('.effects__list').addEventListener('change', (evt) => {
+  const currentEffect = document.querySelector('input[name="effect"]:checked').value;
+  if (slider.noUiSlider) {
+    slider.noUiSlider.destroy();
+  }
+  noUiSlider.create(slider, CONFIGS[currentEffect]);
+  const effectLevelValue = document.querySelector('.effect-level__value');
+  slider.noUiSlider.on('update', (values) => {
+    const value = values[0];
+    effectLevelValue.value = value;
     switch (currentEffect) {
       case 'chrome':
-        imgPreview.style.filter = `grayscale(${(value / MAX_RANGE).toFixed(1)})`;
+        imgPreview.style.filter = `grayscale(${value})`;
         break;
       case 'sepia':
-        imgPreview.style.filter = `sepia(${(value / MAX_RANGE).toFixed(1)})`;
+        imgPreview.style.filter = `sepia(${value})`;
         break;
       case 'marvin':
-        imgPreview.style.filter = `invert(${value.toFixed(1)}%)`;
+        imgPreview.style.filter = `invert(${value}%)`;
         break;
       case 'phobos':
-        imgPreview.style.filter = `blur(${(value * BLUR_SCALE_FACTOR).toFixed(1)}px)`;
+        effectLevelValue.value = value;
+        imgPreview.style.filter = `blur(${value}px)`;
         break;
       case 'heat':
-        imgPreview.style.filter = `brightness(${(1 + (value * BRIGHTNESS_SCALE_FACTOR)).toFixed(1)})`;
+        imgPreview.style.filter = `brightness(${value})`;
         break;
       default:
         imgPreview.style.filter = 'none';
     }
   });
 
-  document.querySelector('.effects__list').addEventListener('change', (evt) => {
-    if (evt.target.value === 'none') {
-      effectLevelSlider.classList.add('hidden');
-    } else {
-      effectLevelSlider.classList.remove('hidden');
-    }
-    slider.noUiSlider.set(START_VALUE);
-  });
 
-  window.addEventListener('load', () => {
-    const currentEffect = document.querySelector('input[name="effect"]:checked').value;
-    if (currentEffect === 'none') {
-      effectLevelSlider.classList.add('hidden');
-    }
-  });
-}
+  if (evt.target.value === 'none') {
+    effectLevelSlider.classList.add('hidden');
+  } else {
+    effectLevelSlider.classList.remove('hidden');
+  }
+  slider.noUiSlider.set(100);
+});
+
+window.addEventListener('load', () => {
+  const currentEffect = document.querySelector('input[name="effect"]:checked').value;
+  if (currentEffect === 'none') {
+    effectLevelSlider.classList.add('hidden');
+  }
+});
+

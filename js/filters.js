@@ -2,12 +2,13 @@ import { renderUsersPictures, clearUsersPictures } from './thumbnails.js';
 import { getData } from './api.js';
 import { debounce } from './util.js';
 
+const DEBOUNCE_DELAY = 500;
+
 const imgFilters = document.querySelector('.img-filters');
 const filterDefault = imgFilters.querySelector('#filter-default');
 const filterRandom = imgFilters.querySelector('#filter-random');
 const filterDiscussed = imgFilters.querySelector('#filter-discussed');
 const filters = [filterDefault, filterRandom, filterDiscussed];
-const DEBOUNCE_DELAY = 500;
 
 let usersPictures = null;
 
@@ -21,6 +22,7 @@ const getRandomPictures = (pictures) => {
     randomPictures.splice(Math.floor(Math.random() * randomPictures.length), 1);
   }
   return randomPictures;
+
 };
 
 const getDiscussedPictures = (pictures) => pictures.slice().sort((a, b) => b.comments.length - a.comments.length);
