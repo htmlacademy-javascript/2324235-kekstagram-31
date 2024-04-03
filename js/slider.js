@@ -2,65 +2,124 @@ import { imgPreview } from './uploadForm.js';
 
 const effectLevelSlider = document.querySelector('.img-upload__effect-level');
 const slider = document.querySelector('.effect-level__slider');
-if (slider) {
-  noUiSlider.create(slider, {
-    start: [100],
-    step: 0.1,
-    range: {
-      'min': [0],
-      'max': [100]
-    },
-    format: {
-      to: function (value) {
-        return Number(value).toFixed(1);
-      },
-      from: function (value) {
-        return Number(value);
-      }
+
+const format = {
+  to: function (value) {
+    if (Number.isInteger(value)) {
+      return value.toFixed(0);
     }
-  });
+    return value.toFixed(1);
+  },
+  from: function (value) {
+    return parseFloat(value);
+  },
+};
 
-  slider.noUiSlider.on('update', (values, handle) => {
-    const value = Number(values[handle]);
-    const effectLevelValue = document.querySelector('.effect-level__value');
-    effectLevelValue.value = value.toFixed(1);
+const defaultSettings = {
+  animate: false,
+  start: 0,
+  step: 0.1,
+  connect: 'lower',
+  range: {
+    min: 0,
+    max: 1
+  },
+};
 
-    const currentEffect = document.querySelector('input[name="effect"]:checked').value;
+const CONFIGS = {
+  chrome: {
+    range: {
+      min: 0,
+      max: 1
+    },
+    start: 1,
+    step: 0.1,
+    format
+  },
+  sepia: {
+    range: {
+      min: 0,
+      max: 1
+    },
+    start: 1,
+    step: 0.1,
+    format
+  },
+  marvin: {
+    range: {
+      min: 0,
+      max: 100
+    },
+    start: 100,
+    step: 1
+  },
+  phobos: {
+    range: {
+      min: 0,
+      max: 3
+    },
+    start: 3,
+    step: 0.1,
+    format
+  },
+  heat: {
+    range: {
+      min: 1,
+      max: 3
+    },
+    start: 3,
+    step: 0.1,
+    format
+  },
+  none: defaultSettings
 
+};
+
+document.querySelector('.effects__list').addEventListener('change', (evt) => {
+  const currentEffect = document.querySelector('input[name="effect"]:checked').value;
+  if (slider.noUiSlider) {
+    slider.noUiSlider.destroy();
+  }
+  noUiSlider.create(slider, CONFIGS[currentEffect]);
+  const effectLevelValue = document.querySelector('.effect-level__value');
+  slider.noUiSlider.on('update', (values) => {
+    const value = values[0];
+    effectLevelValue.value = value;
     switch (currentEffect) {
       case 'chrome':
-        imgPreview.style.filter = `grayscale(${(value / 100).toFixed(1)})`;
+        imgPreview.style.filter = `grayscale(${value})`;
         break;
       case 'sepia':
-        imgPreview.style.filter = `sepia(${(value / 100).toFixed(1)})`;
+        imgPreview.style.filter = `sepia(${value})`;
         break;
       case 'marvin':
-        imgPreview.style.filter = `invert(${value.toFixed(1)}%)`;
+        imgPreview.style.filter = `invert(${value}%)`;
         break;
       case 'phobos':
-        imgPreview.style.filter = `blur(${(value * 0.03).toFixed(1)}px)`;
+        effectLevelValue.value = value;
+        imgPreview.style.filter = `blur(${value}px)`;
         break;
       case 'heat':
-        imgPreview.style.filter = `brightness(${(1 + (value * 0.02)).toFixed(1)})`;
+        imgPreview.style.filter = `brightness(${value})`;
         break;
       default:
         imgPreview.style.filter = 'none';
     }
   });
 
-  document.querySelector('.effects__list').addEventListener('change', (evt) => {
-    if (evt.target.value === 'none') {
-      effectLevelSlider.classList.add('hidden');
-    } else {
-      effectLevelSlider.classList.remove('hidden');
-    }
-    slider.noUiSlider.set(100);
-  });
 
-  window.addEventListener('load', () => {
-    const currentEffect = document.querySelector('input[name="effect"]:checked').value;
-    if (currentEffect === 'none') {
-      effectLevelSlider.classList.add('hidden');
-    }
-  });
-}
+  if (evt.target.value === 'none') {
+    effectLevelSlider.classList.add('hidden');
+  } else {
+    effectLevelSlider.classList.remove('hidden');
+  }
+  slider.noUiSlider.set(100);
+});
+
+window.addEventListener('load', () => {
+  const currentEffect = document.querySelector('input[name="effect"]:checked').value;
+  if (currentEffect === 'none') {
+    effectLevelSlider.classList.add('hidden');
+  }
+});
+

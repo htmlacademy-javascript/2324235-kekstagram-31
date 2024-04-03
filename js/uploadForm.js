@@ -18,7 +18,6 @@ const hashtagInput = imgUploadForm.querySelector('.text__hashtags');
 const commentInput = imgUploadForm.querySelector('.text__description');
 const scale = document.querySelector('.scale__control--value');
 
-const slider = document.querySelector('.effect-level__slider');
 const imgPreview = document.querySelector('.img-upload__preview img');
 const effect = document.querySelector('.img-upload__effect-level');
 
@@ -38,18 +37,18 @@ const pristine = new Pristine(imgUploadForm, {
 });
 
 const onEscKeyDown = (evt) => {
-  if (evt.key === 'Escape' && !evt.target.closest('.text__hashtags')) {
+  if (evt.key === 'Escape' && !evt.target.closest('.text__hashtags') && !document.querySelector('.error__inner')) {
     formOverlay.classList.add('hidden');
     document.body.classList.remove('modal-open');
+    resetFormHandler();
   }
 };
 
-const resetFormHandler = () => {
+function resetFormHandler() {
   formOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.addEventListener('keydown', onEscKeyDown);
   imgPreview.style.transform = 'scale(1)';
-  slider.noUiSlider.set(SCALE_MAX);
   imgPreview.style.filter = 'none';
   effect.classList.add('hidden');
   scale.value = `${SCALE_MAX}%`;
@@ -57,7 +56,8 @@ const resetFormHandler = () => {
   effect.classList.add('hidden');
   inputFile.value = '';
   imgUploadForm.reset();
-};
+  pristine.reset();
+}
 
 cancelButton.addEventListener('click', () => {
   formOverlay.classList.add('hidden');
@@ -69,7 +69,7 @@ scaleControlSmaller.addEventListener('click', () => {
   let scaleValue = parseInt(scaleControlValue.value, SCALE_MIN);
   if (scaleValue > SCALE_STEP) {
     scaleValue -= SCALE_STEP;
-    scaleControlValue.value = `${scaleValue} %`;
+    scaleControlValue.value = `${scaleValue}%`;
     imgPreview.style.transform = `scale(${scaleValue / SCALE_MAX})`;
   }
 });
@@ -78,7 +78,7 @@ scaleControlBigger.addEventListener('click', () => {
   let scaleValue = parseInt(scaleControlValue.value, SCALE_MIN);
   if (scaleValue < SCALE_MAX) {
     scaleValue += SCALE_STEP;
-    scaleControlValue.value = `${scaleValue} %`;
+    scaleControlValue.value = `${scaleValue}%`;
     imgPreview.style.transform = `scale(${scaleValue / SCALE_MAX})`;
   }
 });
@@ -89,7 +89,7 @@ pristine.addValidator(hashtagInput, (value) => {
     return true;
   }
 
-  const hashtags = value.split(' ');
+  const hashtags = value.split(' ').filter((e) => e !== '');
 
   if (hashtags.length > MAX_HASHTAGS) {
     hashtagErrorMessage = 'Слишком много хэштегов. Максимум 5.';
@@ -119,7 +119,7 @@ pristine.addValidator(hashtagInput, (value) => {
       return false;
     }
 
-    if (/[^a-zа-яё0-9#]/i.test(hashtag)) {
+    if (!/^#[a-zа-яё0-9]{1,19}$/i.test(hashtag)) {
       hashtagErrorMessage = 'Хэштег может содержать только буквы и цифры.';
       return false;
     }
@@ -220,14 +220,21 @@ inputFile.addEventListener('change', () => {
   document.body.classList.add('modal-open');
   const file = inputFile.files[0];
   const fileName = file.name.toLowerCase();
-  const reader = new FileReader();
-
-  reader.onloadend = function () {
-    imgPreview.src = reader.result;
-  };
 
   if (file && FILE_TYPES.some((it) => fileName.endsWith(it))) {
-    reader.readAsDataURL(file);
+    const objectURL = URL.createObjectURL(file);
+    imgPreview.src = objectURL;
+
+    const previewElements = document.querySelectorAll('.effects__preview');
+
+    previewElements.forEach((previewElement) => {
+      previewElement.style.backgroundImage = `url(${objectURL})`;
+    });
+
+    imgPreview.onload = () => {
+      URL.revokeObjectURL(objectURL);
+    };
+
     submitButton.disabled = false;
   } else {
     imgPreview.src = '';
@@ -249,25 +256,6 @@ errorMessageElement.style.color = 'white';
 errorMessageElement.style.textAlign = 'center';
 errorMessageElement.style.zIndex = '1000';
 errorMessageElement.style.display = 'none';
-
-imgUploadForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-
-  const formData = new FormData(imgUploadForm);
-
-  sendData(formData)
-    .then(() => {
-      errorMessageElement.style.display = 'none';
-    })
-
-    .catch(() => {
-      errorMessageElement.style.display = 'block';
-      setTimeout(() => {
-        errorMessageElement.style.display = 'none';
-      }, 3000);
-
-    });
-});
 
 document.body.prepend(errorMessageElement);
 
