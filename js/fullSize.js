@@ -61,7 +61,7 @@ function openBigPicture(photo) {
   likesCounter.textContent = photo.likes;
   pictureUrl.src = photo.url;
   commentsCount.textContent = photo.comments.length;
-  socialCommentCount.textContent = photo.comments.length < 5 ? photo.comments.length : 5;
+  socialCommentCount.textContent = photo.comments.length < COMMENTS_LOAD_STEP ? photo.comments.length : COMMENTS_LOAD_STEP;
 
   setTimeout(() => {
     if (photo.comments.length <= 5) {
