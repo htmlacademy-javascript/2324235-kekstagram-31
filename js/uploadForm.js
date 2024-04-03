@@ -220,14 +220,21 @@ inputFile.addEventListener('change', () => {
   document.body.classList.add('modal-open');
   const file = inputFile.files[0];
   const fileName = file.name.toLowerCase();
-  const reader = new FileReader();
-
-  reader.onloadend = function () {
-    imgPreview.src = reader.result;
-  };
 
   if (file && FILE_TYPES.some((it) => fileName.endsWith(it))) {
-    reader.readAsDataURL(file);
+    const objectURL = URL.createObjectURL(file);
+    imgPreview.src = objectURL;
+
+    const previewElements = document.querySelectorAll('.effects__preview');
+
+    previewElements.forEach((previewElement) => {
+      previewElement.style.backgroundImage = `url(${objectURL})`;
+    });
+
+    imgPreview.onload = () => {
+      URL.revokeObjectURL(objectURL);
+    };
+
     submitButton.disabled = false;
   } else {
     imgPreview.src = '';
