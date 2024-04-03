@@ -3,6 +3,18 @@ import { imgPreview } from './uploadForm.js';
 const effectLevelSlider = document.querySelector('.img-upload__effect-level');
 const slider = document.querySelector('.effect-level__slider');
 
+const format = {
+  to: function (value) {
+    if (Number.isInteger(value)) {
+      return value.toFixed(0);
+    }
+    return value.toFixed(1);
+  },
+  from: function (value) {
+    return parseFloat(value);
+  },
+};
+
 const defaultSettings = {
   animate: false,
   start: 0,
@@ -11,17 +23,6 @@ const defaultSettings = {
   range: {
     min: 0,
     max: 1
-  },
-  format: {
-    to: function (value) {
-      if (Number.isInteger(value)) {
-        return value.toFixed(0);
-      }
-      return value.toFixed(1);
-    },
-    from: function (value) {
-      return parseFloat(value);
-    },
   },
 };
 
@@ -33,7 +34,7 @@ const CONFIGS = {
     },
     start: 1,
     step: 0.1,
-    format: defaultSettings
+    format
   },
   sepia: {
     range: {
@@ -42,7 +43,7 @@ const CONFIGS = {
     },
     start: 1,
     step: 0.1,
-    format: defaultSettings
+    format
   },
   marvin: {
     range: {
@@ -59,7 +60,7 @@ const CONFIGS = {
     },
     start: 3,
     step: 0.1,
-    format: defaultSettings
+    format
   },
   heat: {
     range: {
@@ -68,7 +69,7 @@ const CONFIGS = {
     },
     start: 3,
     step: 0.1,
-    format: defaultSettings
+    format
   },
   none: defaultSettings
 

@@ -46,20 +46,27 @@ const setActiveFilter = (activeFilter) => {
   activeFilter.classList.add('img-filters__button--active');
 };
 
-filterDefault.addEventListener('click', debounce(() => {
-  clearUsersPictures();
-  renderUsersPictures(usersPictures);
+filterDefault.addEventListener('click', () => {
   setActiveFilter(filterDefault);
-}, DEBOUNCE_DELAY));
+  debounce(() => {
+    clearUsersPictures();
+    renderUsersPictures(usersPictures);
+  }, DEBOUNCE_DELAY)();
+});
 
-filterRandom.addEventListener('click', debounce(() => {
-  clearUsersPictures();
-  renderUsersPictures(getRandomPictures(usersPictures));
+
+filterRandom.addEventListener('click', () => {
   setActiveFilter(filterRandom);
-}, DEBOUNCE_DELAY));
+  debounce(() => {
+    clearUsersPictures();
+    renderUsersPictures(getRandomPictures(usersPictures));
+  }, DEBOUNCE_DELAY)();
+});
 
-filterDiscussed.addEventListener('click', debounce(() => {
-  clearUsersPictures();
-  renderUsersPictures(getDiscussedPictures(usersPictures));
+filterDiscussed.addEventListener('click', () => {
   setActiveFilter(filterDiscussed);
-}, DEBOUNCE_DELAY));
+  debounce(() => {
+    clearUsersPictures();
+    renderUsersPictures(getDiscussedPictures(usersPictures));
+  }, DEBOUNCE_DELAY)();
+});
