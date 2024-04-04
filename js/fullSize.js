@@ -1,6 +1,7 @@
 import { isEscapeKey, isEnterKey } from './util.js';
 
 const COMMENTS_LOAD_STEP = 5;
+
 const userBigPicture = document.querySelector('.big-picture');
 const userBigPictureCancel = document.querySelector('.big-picture__cancel');
 const likesCounter = userBigPicture.querySelector('.likes-count');
@@ -64,7 +65,7 @@ function openBigPicture(photo) {
   socialCommentCount.textContent = photo.comments.length < COMMENTS_LOAD_STEP ? photo.comments.length : COMMENTS_LOAD_STEP;
 
   setTimeout(() => {
-    if (photo.comments.length <= 5) {
+    if (photo.comments.length <= COMMENTS_LOAD_STEP) {
       commentsLoader.classList.add('hidden');
     } else {
       commentsLoader.classList.remove('hidden');
