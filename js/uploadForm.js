@@ -49,10 +49,9 @@ function resetFormHandler() {
   document.body.classList.remove('modal-open');
   document.addEventListener('keydown', onEscKeyDown);
   imgPreview.style.transform = 'scale(1)';
-  imgPreview.style.filter = 'none';
+  imgPreview.style.filter = '';
   effect.classList.add('hidden');
   scale.value = `${SCALE_MAX}%`;
-  imgPreview.style.transform = '';
   effect.classList.add('hidden');
   inputFile.value = '';
   imgUploadForm.reset();
@@ -145,7 +144,7 @@ pristine.addValidator(commentInput, (value) => {
   }
 
   return value.length <= MAX_COMMENT_LENGTH;
-}, 'Комментарий не может быть длиннее 140 символов.', 2);
+}, 'Комментарий не может быть длиннее 140 символов.');
 
 commentInput.addEventListener('keydown', (evt) => {
   if (evt.key === 'Escape') {
