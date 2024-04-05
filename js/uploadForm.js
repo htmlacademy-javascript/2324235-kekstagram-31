@@ -88,7 +88,7 @@ pristine.addValidator(hashtagInput, (value) => {
     return true;
   }
 
-  const hashtags = value.split(' ').filter((e) => e !== '');
+  const hashtags = value.split(' ').filter((hashtag) => hashtag !== '');
 
   if (hashtags.length > MAX_HASHTAGS) {
     hashtagErrorMessage = 'Слишком много хэштегов. Максимум 5.';

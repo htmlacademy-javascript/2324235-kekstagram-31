@@ -25,7 +25,7 @@ const getRandomPictures = (pictures) => {
 
 };
 
-const getDiscussedPictures = (pictures) => pictures.slice().sort((a, b) => b.comments.length - a.comments.length);
+const getDiscussedPictures = (pictures) => pictures.slice().sort((firstPicture, secondPicture) => secondPicture.comments.length - firstPicture.comments.length);
 
 getData().then((data) => {
   usersPictures = data;
